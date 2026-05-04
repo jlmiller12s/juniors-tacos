@@ -793,14 +793,17 @@ input {
 .video-wall {
   position: relative;
   isolation: isolate;
+  justify-self: center;
+  width: min(100%, 28rem);
   border: 1px solid var(--border-strong);
   box-shadow: var(--shadow);
   background: var(--ink);
+  overflow: hidden;
 }
 
 .video-wall video {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 9 / 16;
   object-fit: cover;
   filter: saturate(0.88) contrast(1.06);
 }
@@ -1090,6 +1093,10 @@ input {
 
   .visual-copy {
     order: initial;
+  }
+
+  .video-wall {
+    width: min(100%, 24rem);
   }
 
   .gallery,
