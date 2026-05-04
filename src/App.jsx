@@ -404,7 +404,7 @@ function App() {
         </div>
         <div className="container footer-bottom">
           <span>© 2026 Jevon Westmoland</span>
-          <span>Built for jlmiller12s/jevon-westmoland</span>
+          <span>Built by Jimmie Miller - Altared Alchemie AI Services</span>
         </div>
       </footer>
     </>
