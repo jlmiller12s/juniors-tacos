@@ -792,43 +792,28 @@ input {
 
 .video-wall {
   position: relative;
-  min-height: 42rem;
   isolation: isolate;
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow);
+  background: var(--ink);
 }
 
 .video-wall video {
-  width: min(72%, 24rem);
-  aspect-ratio: 9 / 16;
-  object-fit: cover;
-  border: 1px solid var(--border-strong);
-  box-shadow: var(--shadow);
-  filter: saturate(0.88) contrast(1.06);
-}
-
-.video-card-image {
-  position: absolute;
-  right: 0;
-  bottom: 2rem;
-  width: min(66%, 31rem);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow);
-}
-
-.video-card-image img {
   width: 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 16 / 9;
   object-fit: cover;
+  filter: saturate(0.88) contrast(1.06);
 }
 
 .video-wall::after {
   content: "PLAY";
   position: absolute;
-  inset: 15% 8% auto auto;
+  inset: auto 1rem 0.15rem auto;
   z-index: -1;
   color: transparent;
   -webkit-text-stroke: 1px rgba(200, 162, 76, 0.35);
   font-family: "Playfair Display", serif;
-  font-size: clamp(5rem, 13vw, 12rem);
+  font-size: clamp(4rem, 10vw, 9rem);
   font-weight: 900;
   letter-spacing: 0.08em;
 }
@@ -1107,10 +1092,6 @@ input {
     order: initial;
   }
 
-  .video-wall {
-    min-height: 34rem;
-  }
-
   .gallery,
   .product-rail,
   .press-grid,
@@ -1169,14 +1150,6 @@ input {
   .show-card h3,
   .press-card h3 {
     margin-top: 2.2rem;
-  }
-
-  .video-wall video {
-    width: 66%;
-  }
-
-  .video-card-image {
-    width: 74%;
   }
 
   .hero-title {

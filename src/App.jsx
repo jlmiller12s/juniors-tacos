@@ -282,9 +282,6 @@ function App() {
 
             <div className="video-wall reveal">
               <video src={image("jevon-room-clip.mp4")} autoPlay muted loop playsInline />
-              <div className="video-card-image">
-                <img src={image("jevon-mic-hoodie.jpg")} alt="Jevon Westmoland with microphone" />
-              </div>
             </div>
           </div>
         </section>
