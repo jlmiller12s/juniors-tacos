@@ -9,3 +9,5 @@ Convert-ToPortrait.ps1
 Rotate-LandscapeToPortrait.ps1
 portrait_sample_test.mp4
 screen_probe.png
+
+.vercel
