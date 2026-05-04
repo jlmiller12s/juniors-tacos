@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.vercel/
+.codex-temp/
+*.log
+ffmpeg-release-essentials.zip
+tools/
+Convert-ToPortrait.ps1
+Rotate-LandscapeToPortrait.ps1
+portrait_sample_test.mp4
+screen_probe.png
