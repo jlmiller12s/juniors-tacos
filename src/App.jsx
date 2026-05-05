@@ -1,373 +1,1266 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import {
+  ArrowRight,
+  CalendarDays,
+  ChevronRight,
+  Clock,
+  ExternalLink,
+  Flame,
+  Heart,
+  MapPin,
+  Menu,
+  Minus,
+  Navigation,
+  Plus,
+  Search,
+  ShoppingBag,
+  Sparkles,
+  Star,
+  Truck,
+  Utensils,
+  X,
+} from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
+
+const asset = (name) => `/assets/${name}`;
 
 const navItems = [
+  ["Menu", "#menu"],
+  ["Offers", "#offers"],
+  ["Pickup", "#schedule"],
+  ["Order", "#catering"],
   ["Story", "#story"],
-  ["Shows", "#shows"],
-  ["Video", "#video"],
-  ["Store", "#store"],
-  ["Book", "#book"],
 ];
-
-const image = (name) => `/assets/${name}`;
 
 const sources = {
-  instagram: "https://www.instagram.com/jevon314/",
-  linkedin: "https://www.linkedin.com/in/jevon-westmoland-4a469911b/",
-  boldJourney: "https://boldjourney.com/meet-jevon-westmoland/",
-  canvasRebel: "https://canvasrebel.com/meet-jevon-westmoland/",
-  loonyBin:
-    "https://lr.loonybincomedy.com/ShowDetails/f1fab8b0-ac17-43be-a7a9-8137fb29dc3d/46a4734a-d472-4d42-9712-3574fd06ed97/A_Fresh_Pair_of_Jays_/Little_Rock",
-  store: "https://blessedgodsfavorite.com/collections/all?page=2",
-  gigSalad: "https://www.gigsalad.com/jevon_westmoland_florissant",
+  streetFoodFinder: "https://streetfoodfinder.com/JrsTacos",
+  facebook: "https://www.facebook.com/p/Jrs-Tacos-100086683935294/",
+  bestFoodTrucks: "https://www.bestfoodtrucks.com/truck/jr-s-tacos/menu",
+  cloverMenu: "https://jrs-tacos-saint-peters.cloveronline.com/menu/all",
+  stlFoodTrucks: "https://stlouisfoodtrucks.org/",
 };
 
-const marqueeItems = [
-  "Clean Comedy",
-  "Storytelling",
-  "Faith",
-  "Family",
-  "St. Louis",
-  "A Fresh Pair of Jays",
-  "Host",
-  "Actor",
-  "Writer",
-  "Blessed God's Favorite",
+const cloverItem = (path) => `https://${path}`;
+
+const categories = [
+  "Popular",
+  "Tacos",
+  "Burritos",
+  "Nachos",
+  "Quesadillas",
+  "Drinks",
+  "Postre Desserts",
+  "Tamales",
+  "Sopes",
 ];
 
-const letterize = (text) =>
-  text.split("").map((char, index) => (
-    <span
-      className={char === " " ? "letter space" : "letter"}
-      style={{ "--i": index }}
-      key={`${char}-${index}`}
-    >
-      {char === " " ? "\u00a0" : char}
-    </span>
-  ));
+const tacoOptions = ["No onion", "No cilantro", "Add cheese +$0.25", "Add sour cream +$0.25", "Extra meat +$1.99"];
+const burritoOptions = [
+  "No beans",
+  "No corn",
+  "No sour cream",
+  "No pico",
+  "Fajitas",
+  "Rice",
+  "Extra meat +$1.99",
+  "Extra sour cream +$0.49",
+  "Extra cheese +$0.99",
+];
+const nachosOptions = [
+  "Add asada +$1.99",
+  "Add al pastor +$1.99",
+  "Add ground beef +$1.99",
+  "Add lengua +$2.49",
+  "Add chicken +$1.99",
+  "Add chorizo +$1.99",
+  "No jalapenos",
+];
+const nachosSupremeOptions = [
+  "No beans",
+  "No corn",
+  "No sour cream",
+  "No pico",
+  "No jalapenos",
+  "No ground beef",
+  "Extra meat +$1.99",
+  "Extra sour cream +$0.49",
+  "Extra cheese +$0.99",
+];
+const quesadillaOptions = [
+  "No fajitas",
+  "No sour cream",
+  "No lettuce",
+  "No pico de gallo",
+  "Extra cheese +$1.00",
+  "Extra meat +$1.99",
+  "Extra sour cream +$0.49",
+];
+const cornOptions = ["Mexican mayo", "Cotija cheese", "Crushed Takis", "Lime"];
 
-function useReveals() {
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { rootMargin: "0px 0px -12% 0px", threshold: 0.14 },
-    );
+const menuItems = [
+  {
+    id: "CQVBM4H8TAF00",
+    name: "Pollo Taco Chicken",
+    category: "Tacos",
+    price: 4,
+    image: asset("tacos-hero.jpg"),
+    badge: "Taco",
+    description: "Corn tortilla, chicken, topped off with onion and cilantro.",
+    options: tacoOptions,
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/pollo-taco-chicken-CQVBM4H8TAF00"),
+    favorite: true,
+  },
+  {
+    id: "C49SBY0FGFK4P",
+    name: "El Pastor Taco Season Pork",
+    category: "Tacos",
+    price: 4,
+    image: asset("tacos-hero.jpg"),
+    badge: "Taco",
+    description: "Corn tortilla, season pork topped off with onion and cilantro.",
+    options: tacoOptions,
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/el-pastor-taco-season-pork-C49SBY0FGFK4P"),
+    favorite: true,
+  },
+  {
+    id: "7ZK3355XP9XVJ",
+    name: "Lengua Taco Beef Tongue",
+    category: "Tacos",
+    price: 4.5,
+    image: asset("tacos-hero.jpg"),
+    badge: "Taco",
+    description: "Corn tortilla, beef tongue, topped off with onion and cilantro.",
+    options: tacoOptions,
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/lengua-taco-beef-tongue-7ZK3355XP9XVJ"),
+    favorite: false,
+  },
+  {
+    id: "TVAMSS0E38BYC",
+    name: "Asada Taco Steak",
+    category: "Tacos",
+    price: 4,
+    image: asset("tacos-hero.jpg"),
+    badge: "Taco",
+    description: "Corn tortilla, grilled steak, topped off with onion and cilantro.",
+    options: tacoOptions,
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/asada-taco-steak-TVAMSS0E38BYC"),
+    favorite: true,
+  },
+  {
+    id: "NW0H1EPC3SBWR",
+    name: "Chorizo Taco Season Sausage",
+    category: "Tacos",
+    price: 4,
+    image: asset("tacos-hero.jpg"),
+    badge: "Taco",
+    description: "Corn tortilla, chorizo season pork sausage, topped off with onion and cilantro.",
+    options: tacoOptions,
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/chorizo-taco-season-sausage-NW0H1EPC3SBWR"),
+    favorite: false,
+  },
+  {
+    id: "HE9K731BNXKXJ",
+    name: "Asada/Steak Burrito JR.",
+    category: "Burritos",
+    price: 15,
+    image: asset("burrito-close.jpg"),
+    badge: "Burrito",
+    description: "12 inch flour tortilla with asada, melted cheese, fajitas, rice, pico, corn, black beans, and sour cream.",
+    options: burritoOptions,
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/asadasteak-burrito-jr-HE9K731BNXKXJ"),
+    favorite: true,
+  },
+  {
+    id: "5SXGF1A4MFHEC",
+    name: "Pollo/Chicken Burrito JR.",
+    category: "Burritos",
+    price: 15,
+    image: asset("burrito-close.jpg"),
+    badge: "Burrito",
+    description: "12 inch flour tortilla with chicken, melted cheese, fajitas, rice, pico, corn, black beans, and sour cream.",
+    options: burritoOptions,
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/pollochicken-burrito-jr-5SXGF1A4MFHEC"),
+    favorite: false,
+  },
+  {
+    id: "MQN8XN6WQ5BNE",
+    name: "Al Pastor/Season Pork Burrito JR.",
+    category: "Burritos",
+    price: 15,
+    image: asset("burrito-close.jpg"),
+    badge: "Burrito",
+    description: "12 inch flour tortilla with al pastor, melted cheese, fajitas, rice, pico, corn, black beans, and sour cream.",
+    options: burritoOptions,
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/al-pastorseason-pork-burrito-jr-MQN8XN6WQ5BNE"),
+    favorite: false,
+  },
+  {
+    id: "7J1RJF7W9KPZ2",
+    name: "Chorizo/Season Sausage Burrito JR.",
+    category: "Burritos",
+    price: 15,
+    image: asset("burrito-close.jpg"),
+    badge: "Burrito",
+    description: "12 inch flour tortilla with chorizo, melted cheese, fajitas, rice, pico, corn, black beans, and sour cream.",
+    options: burritoOptions,
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/chorizoseason-sausage-burrito-jr-7J1RJF7W9KPZ2"),
+    favorite: false,
+  },
+  {
+    id: "M3BNBVY2JY14E",
+    name: "Lengua/Beef Tongue Burrito JR.",
+    category: "Burritos",
+    price: 16,
+    image: asset("burrito-close.jpg"),
+    badge: "Burrito",
+    description: "12 inch flour tortilla with beef tongue, melted cheese, fajitas, rice, pico, corn, black beans, and sour cream.",
+    options: burritoOptions,
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/lenguabeef-tongue-burrito-jr-M3BNBVY2JY14E"),
+    favorite: false,
+  },
+  {
+    id: "J1WDW2E30NC0M",
+    name: "Nachos Supreme",
+    category: "Nachos",
+    price: 14,
+    image: asset("nachos-share.jpg"),
+    badge: "Shareable",
+    description: "Corn tortilla chips, cheese sauce, ground beef, pico de gallo, corn, black beans, sour cream, and jalapenos.",
+    options: nachosSupremeOptions,
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/nachos-supreme-J1WDW2E30NC0M"),
+    favorite: true,
+  },
+  {
+    id: "A4H75V301VBWC",
+    name: "Dori Nachos",
+    category: "Nachos",
+    price: 7,
+    image: asset("nachos-share.jpg"),
+    badge: "Snack",
+    description: "Nacho chips topped off with cheese sauce and jalapenos.",
+    options: nachosOptions,
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/dori-nachos-A4H75V301VBWC"),
+    favorite: false,
+  },
+  {
+    id: "GR2FZJVQVCM3T",
+    name: "Dori Nachos Supreme",
+    category: "Nachos",
+    price: 14,
+    image: asset("nachos-share.jpg"),
+    badge: "Shareable",
+    description: "Dorito chips, cheese sauce, ground beef, pico de gallo, corn, black beans, sour cream, and jalapenos.",
+    options: nachosSupremeOptions,
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/dori-nachos-supreme-GR2FZJVQVCM3T"),
+    favorite: false,
+  },
+  {
+    id: "TVKMX9ZZ2EW8C",
+    name: "Nachos",
+    category: "Nachos",
+    price: 7,
+    image: asset("nachos-share.jpg"),
+    badge: "Snack",
+    description: "Tortilla chips with cheese sauce and jalapenos.",
+    options: nachosOptions,
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/nachos-TVKMX9ZZ2EW8C"),
+    favorite: false,
+  },
+  {
+    id: "CVVJZK10W0BCA",
+    name: "Mexican Street Corn",
+    category: "Nachos",
+    price: 6,
+    image: asset("quesadilla-table.jpg"),
+    badge: "Street corn",
+    description: "Mexican street corn with mayo, cotija cheese, crushed Takis, and lime options.",
+    options: cornOptions,
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/mexican-street-corn-CVVJZK10W0BCA"),
+    favorite: true,
+  },
+  {
+    id: "XNXC01D92Q6FC",
+    name: "Pollo Quesadilla Chicken",
+    category: "Quesadillas",
+    price: 14,
+    image: asset("quesadilla-table.jpg"),
+    badge: "Cheesy",
+    description: "Flour tortilla with chicken, melted cheese, and fajitas. Lettuce, pico de gallo, and sour cream on the side.",
+    options: quesadillaOptions,
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/pollo-quesadilla-chicken-XNXC01D92Q6FC"),
+    favorite: true,
+  },
+  {
+    id: "0VYXAKY1PCNSJ",
+    name: "Al Pastor Quesadilla Season Pork",
+    category: "Quesadillas",
+    price: 14,
+    image: asset("quesadilla-table.jpg"),
+    badge: "Cheesy",
+    description: "Flour tortilla with season pork, melted cheese, and fajitas. Lettuce, pico de gallo, and sour cream on the side.",
+    options: quesadillaOptions,
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/al-pastor-quesadilla-season-pork-0VYXAKY1PCNSJ"),
+    favorite: false,
+  },
+  {
+    id: "AK0HC1AP09PV2",
+    name: "Lengua Quesadilla Beef Tongue",
+    category: "Quesadillas",
+    price: 15,
+    image: asset("quesadilla-table.jpg"),
+    badge: "Cheesy",
+    description: "Flour tortilla with beef tongue, melted cheese, and fajitas. Lettuce, pico de gallo, and sour cream on the side.",
+    options: quesadillaOptions,
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/lengua-quesadilla-beef-tongue-AK0HC1AP09PV2"),
+    favorite: false,
+  },
+  {
+    id: "6SX0AV3K86GQA",
+    name: "Asada Quesadilla Steak",
+    category: "Quesadillas",
+    price: 14,
+    image: asset("quesadilla-table.jpg"),
+    badge: "Cheesy",
+    description: "Flour tortilla with steak, melted cheese, and fajitas. Lettuce, pico de gallo, and sour cream outside.",
+    options: quesadillaOptions,
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/asada-quesadilla-steak-6SX0AV3K86GQA"),
+    favorite: true,
+  },
+  {
+    id: "T2D1QVVXBWTQA",
+    name: "Chorizo/Season Sausage Quesadilla",
+    category: "Quesadillas",
+    price: 14,
+    image: asset("quesadilla-table.jpg"),
+    badge: "Cheesy",
+    description: "Flour tortilla with chorizo, melted cheese, and fajitas. Lettuce, pico de gallo, and sour cream on the side.",
+    options: quesadillaOptions,
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/chorizoseason-sausage-quesadilla-T2D1QVVXBWTQA"),
+    favorite: false,
+  },
+  {
+    id: "BZ2FM86Y55SX4",
+    name: "Cheese Quesadilla",
+    category: "Quesadillas",
+    price: 8.99,
+    image: asset("quesadilla-table.jpg"),
+    badge: "Cheesy",
+    description: "Flour tortilla with cheese.",
+    options: quesadillaOptions,
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/cheese-quesadilla-BZ2FM86Y55SX4"),
+    favorite: false,
+  },
+  {
+    id: "26ABYNERNWEGC",
+    name: "Veggie Quesadilla",
+    category: "Quesadillas",
+    price: 13,
+    image: asset("quesadilla-table.jpg"),
+    badge: "Veggie",
+    description: "Flour tortilla with melted cheese, fajitas, black beans, and corn. Lettuce, pico, and sour cream outside.",
+    options: quesadillaOptions,
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/veggie-quesadilla-26ABYNERNWEGC"),
+    favorite: false,
+  },
+  {
+    id: "90MRC5FZ19NV0",
+    name: "Coca",
+    category: "Drinks",
+    price: 2,
+    image: asset("jarritos-green.jpg"),
+    badge: "Cold",
+    description: "Classic Coca-Cola.",
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/coca-90MRC5FZ19NV0"),
+    favorite: false,
+  },
+  {
+    id: "6F45ACXQWM5R2",
+    name: "Agua/Water",
+    category: "Drinks",
+    price: 2,
+    image: asset("jarritos-green.jpg"),
+    badge: "Cold",
+    description: "Bottled water.",
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/aguawater-6F45ACXQWM5R2"),
+    favorite: false,
+  },
+  {
+    id: "H2AGXE3G0YJR2",
+    name: "Orange",
+    category: "Drinks",
+    price: 3.5,
+    image: asset("jarritos-green.jpg"),
+    badge: "Unavailable",
+    description: "Orange drink.",
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/orange-H2AGXE3G0YJR2"),
+    available: false,
+    favorite: false,
+  },
+  {
+    id: "0KK62E4DM79HR",
+    name: "Sprite",
+    category: "Drinks",
+    price: 2,
+    image: asset("jarritos-green.jpg"),
+    badge: "Cold",
+    description: "Sprite.",
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/sprite-0KK62E4DM79HR"),
+    favorite: false,
+  },
+  {
+    id: "DP5HXHK91PEA8",
+    name: "Jarrito Pineapple",
+    category: "Drinks",
+    price: 3.5,
+    image: asset("jarritos-green.jpg"),
+    badge: "Jarrito",
+    description: "Jarritos pineapple soda.",
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/jarrito-pineapple-DP5HXHK91PEA8"),
+    favorite: false,
+  },
+  {
+    id: "1MNMXMZPCZH1T",
+    name: "Jarrito Fruit Punch",
+    category: "Drinks",
+    price: 3.5,
+    image: asset("jarritos-green.jpg"),
+    badge: "Jarrito",
+    description: "Jarritos fruit punch soda.",
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/jarrito-fruit-punch-1MNMXMZPCZH1T"),
+    favorite: false,
+  },
+  {
+    id: "RAJYBH48NXV2T",
+    name: "Mundet Apple Soda",
+    category: "Drinks",
+    price: 2,
+    image: asset("jarritos-green.jpg"),
+    badge: "Cold",
+    description: "Mundet apple soda.",
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/mundet-apple-soda-RAJYBH48NXV2T"),
+    favorite: false,
+  },
+  {
+    id: "YQNTN3GZ1MHZ6",
+    name: "Jarrito Mandarin",
+    category: "Drinks",
+    price: 3.5,
+    image: asset("jarritos-green.jpg"),
+    badge: "Jarrito",
+    description: "Jarritos mandarin soda.",
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/jarrito-mandarin-YQNTN3GZ1MHZ6"),
+    favorite: true,
+  },
+  {
+    id: "034GCR1G8PBVG",
+    name: "Diet",
+    category: "Drinks",
+    price: 2,
+    image: asset("jarritos-green.jpg"),
+    badge: "Cold",
+    description: "Diet soda.",
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/diet-034GCR1G8PBVG"),
+    favorite: false,
+  },
+  {
+    id: "BZ7PNWR9K6WQT",
+    name: "Dr. Pepper",
+    category: "Drinks",
+    price: 2,
+    image: asset("jarritos-green.jpg"),
+    badge: "Cold",
+    description: "Dr. Pepper.",
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/dr-pepper-BZ7PNWR9K6WQT"),
+    favorite: false,
+  },
+  {
+    id: "9Y9S9P35SX64R",
+    name: "Jarritos Lime",
+    category: "Drinks",
+    price: 3.5,
+    image: asset("jarritos-green.jpg"),
+    badge: "Jarrito",
+    description: "Jarritos lime soda.",
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/jarritos-lime-9Y9S9P35SX64R"),
+    favorite: false,
+  },
+  {
+    id: "AVPB8ZVBQY0K8",
+    name: "Jarrito Tamarindo",
+    category: "Drinks",
+    price: 3.5,
+    image: asset("jarritos-green.jpg"),
+    badge: "Unavailable",
+    description: "Jarritos tamarind soda.",
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/jarrito-tamarindo-AVPB8ZVBQY0K8"),
+    available: false,
+    favorite: false,
+  },
+  {
+    id: "YN4EFVV716146",
+    name: "Jarrito Grape Fruit",
+    category: "Drinks",
+    price: 3.5,
+    image: asset("jarritos-green.jpg"),
+    badge: "Jarrito",
+    description: "Jarritos grapefruit soda.",
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/jarrito-grape-fruit-YN4EFVV716146"),
+    favorite: false,
+  },
+  {
+    id: "ZMFBRWXT41AZE",
+    name: "Tree Leches",
+    category: "Postre Desserts",
+    price: 5,
+    image: asset("tacos-hero.jpg"),
+    badge: "Dessert",
+    description: "Tres leches dessert.",
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/tree-leches-ZMFBRWXT41AZE"),
+    favorite: false,
+  },
+  {
+    id: "P3Z0R6SPCRBWA",
+    name: "Chocolate Tres Leches",
+    category: "Postre Desserts",
+    price: 5,
+    image: asset("tacos-hero.jpg"),
+    badge: "Dessert",
+    description: "Chocolate tres leches dessert.",
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/chocolate-tres-leches-P3Z0R6SPCRBWA"),
+    favorite: false,
+  },
+  {
+    id: "275Q2V6B3N9K2",
+    name: "Tamal de Pollo",
+    category: "Tamales",
+    price: 3.99,
+    image: asset("tacos-hero.jpg"),
+    badge: "Unavailable",
+    description: "Corn dough masa filled with chicken in green salsa.",
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/tamal-de-pollo-275Q2V6B3N9K2"),
+    available: false,
+    favorite: false,
+  },
+  {
+    id: "CYDNA637NYNVE",
+    name: "Tamal de Puerco",
+    category: "Tamales",
+    price: 3.99,
+    image: asset("tacos-hero.jpg"),
+    badge: "Unavailable",
+    description: "Corn dough masa filled with pork in red salsa.",
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/tamal-de-puerco-CYDNA637NYNVE"),
+    available: false,
+    favorite: false,
+  },
+  {
+    id: "G5M056QNVV9GR",
+    name: "Tamal de Fresa",
+    category: "Tamales",
+    price: 3.49,
+    image: asset("tacos-hero.jpg"),
+    badge: "Unavailable",
+    description: "Corn sweet red dough masa filled with raisin.",
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/tamal-de-fresa-G5M056QNVV9GR"),
+    available: false,
+    favorite: false,
+  },
+  {
+    id: "X6CXMAXA4T60M",
+    name: "Tamal de Pina",
+    category: "Tamales",
+    price: 3.49,
+    image: asset("tacos-hero.jpg"),
+    badge: "Unavailable",
+    description: "Corn sweet yellow dough masa filled with raisin.",
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/tamal-de-pina-X6CXMAXA4T60M"),
+    available: false,
+    favorite: false,
+  },
+  {
+    id: "7X42EFQGNEGK0",
+    name: "Sope de Asada",
+    category: "Sopes",
+    price: 5.99,
+    image: asset("quesadilla-table.jpg"),
+    badge: "Unavailable",
+    description: "Thick corn tortilla spread with beans, steak, lettuce, sour cream, pico de gallo, and cotija cheese.",
+    options: quesadillaOptions,
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/sope-de-asada-7X42EFQGNEGK0"),
+    available: false,
+    favorite: false,
+  },
+  {
+    id: "FE5KACTCFFDAT",
+    name: "Sope de AlPastor",
+    category: "Sopes",
+    price: 5.99,
+    image: asset("quesadilla-table.jpg"),
+    badge: "Unavailable",
+    description: "Thick corn tortilla spread with beans, season pork, lettuce, sour cream, pico de gallo, and cotija cheese.",
+    options: quesadillaOptions,
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/sope-de-alpastor-FE5KACTCFFDAT"),
+    available: false,
+    favorite: false,
+  },
+  {
+    id: "E54PFWDTPZEDE",
+    name: "Sope de Chorizo",
+    category: "Sopes",
+    price: 5.99,
+    image: asset("quesadilla-table.jpg"),
+    badge: "Unavailable",
+    description: "Thick corn tortilla spread with beans, Mexican sausage, lettuce, sour cream, pico de gallo, and cotija cheese.",
+    options: quesadillaOptions,
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/sope-de-chorizo-E54PFWDTPZEDE"),
+    available: false,
+    favorite: false,
+  },
+  {
+    id: "5BTB0VDHS2C96",
+    name: "Sope de Pollo",
+    category: "Sopes",
+    price: 5.99,
+    image: asset("quesadilla-table.jpg"),
+    badge: "Unavailable",
+    description: "Thick corn tortilla spread with beans, chicken, lettuce, sour cream, pico de gallo, and cotija cheese.",
+    options: quesadillaOptions,
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/sope-de-pollo-5BTB0VDHS2C96"),
+    available: false,
+    favorite: false,
+  },
+  {
+    id: "QSBH5BKGNYF20",
+    name: "Sope de Lengua",
+    category: "Sopes",
+    price: 5.99,
+    image: asset("quesadilla-table.jpg"),
+    badge: "Unavailable",
+    description: "Thick corn tortilla spread with beans, beef tongue, lettuce, sour cream, pico de gallo, and cotija cheese.",
+    options: quesadillaOptions,
+    orderUrl: cloverItem("jrs-tacos-saint-peters.cloveronline.com/menu/sope-de-lengua-QSBH5BKGNYF20"),
+    available: false,
+    favorite: false,
+  },
+];
 
-    document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
+const offers = [
+  {
+    eyebrow: "Truck Favorite",
+    title: "Taco night without waiting for Tuesday.",
+    copy: "Real Clover pricing is live here: tacos, burritos, nachos, quesadillas, drinks, desserts, tamales, and sopes.",
+    action: "See the menu",
+    icon: Flame,
+  },
+  {
+    eyebrow: "Pickup",
+    title: "Order online through Clover.",
+    copy: "Pickup ordering is enabled for the Saint Peters location, with secure checkout handled by Clover.",
+    action: "Order on Clover",
+    icon: Sparkles,
+  },
+  {
+    eyebrow: "Hours",
+    title: "Thursday through Saturday.",
+    copy: "Clover lists pickup hours from 10:30 AM to 7:30 PM on Thursday, Friday, and Saturday.",
+    action: "See pickup info",
+    icon: Truck,
+  },
+];
+
+const schedule = [
+  {
+    day: "Thu",
+    place: "Pickup ordering",
+    address: "5 Auchly Lane, Saint Peters, MO 63376",
+    time: "10:30am-7:30pm",
+  },
+  {
+    day: "Fri",
+    place: "Pickup ordering",
+    address: "5 Auchly Lane, Saint Peters, MO 63376",
+    time: "10:30am-7:30pm",
+  },
+  {
+    day: "Sat",
+    place: "Pickup ordering",
+    address: "5 Auchly Lane, Saint Peters, MO 63376",
+    time: "10:30am-7:30pm",
+  },
+  {
+    day: "Online",
+    place: "Clover checkout",
+    address: "Pickup only. Delivery and curbside are currently disabled in Clover.",
+    time: "10 min lead",
+  },
+];
+
+const reviews = [
+  "Online ordering powered by Clover",
+  "Pickup: Thu-Sat, 10:30am-7:30pm",
+  "Saint Peters, MO",
+];
+
+function formatPrice(price) {
+  return `$${Number.isInteger(price) ? price : price.toFixed(2)}`;
+}
+
+function getFilteredItems(category) {
+  if (category === "Popular") {
+    return menuItems.filter((item) => item.favorite);
+  }
+
+  return menuItems.filter((item) => item.category === category);
 }
 
 function App() {
+  const rootRef = useRef(null);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const [curtainLifted, setCurtainLifted] = useState(false);
-  const menuLabel = menuOpen ? "Close navigation" : "Open navigation";
-  const marquee = useMemo(() => [...marqueeItems, ...marqueeItems], []);
+  const [activeCategory, setActiveCategory] = useState("Popular");
+  const [cart, setCart] = useState({});
+  const [query, setQuery] = useState("");
 
-  useReveals();
+  const filteredMenu = useMemo(() => {
+    const base = getFilteredItems(activeCategory);
+    const trimmedQuery = query.trim().toLowerCase();
 
-  useEffect(() => {
-    const lift = window.setTimeout(() => setCurtainLifted(true), 500);
-    const onScroll = () => setScrolled(window.scrollY > 40);
-    onScroll();
-    window.addEventListener("scroll", onScroll);
-    return () => {
-      window.clearTimeout(lift);
-      window.removeEventListener("scroll", onScroll);
-    };
-  }, []);
+    if (!trimmedQuery) {
+      return base;
+    }
+
+    return base.filter((item) =>
+      [item.name, item.description, item.category].join(" ").toLowerCase().includes(trimmedQuery),
+    );
+  }, [activeCategory, query]);
+
+  const cartLines = useMemo(() => {
+    return Object.entries(cart)
+      .map(([id, quantity]) => {
+        const item = menuItems.find((menuItem) => menuItem.id === id);
+        return item ? { ...item, quantity } : null;
+      })
+      .filter(Boolean);
+  }, [cart]);
+
+  const totalItems = cartLines.reduce((sum, item) => sum + item.quantity, 0);
+  const cartTotal = cartLines.reduce((sum, item) => sum + item.quantity * item.price, 0);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
   }, [menuOpen]);
 
+  useEffect(() => {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reducedMotion) {
+      return undefined;
+    }
+
+    const context = gsap.context(() => {
+      const heroTimeline = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+      heroTimeline
+        .from(".nav-shell", { yPercent: -120, duration: 0.85 })
+        .from(".hero-kicker", { autoAlpha: 0, y: 24, duration: 0.7 }, "-=0.28")
+        .from(".hero-word", { autoAlpha: 0, yPercent: 110, rotate: 3, stagger: 0.08, duration: 0.9 }, "-=0.35")
+        .from(".hero-copy, .hero-actions, .hero-note", { autoAlpha: 0, y: 28, stagger: 0.12, duration: 0.72 }, "-=0.42")
+        .from(".hero-plate", { autoAlpha: 0, scale: 0.82, rotate: -9, duration: 0.9 }, "-=0.82")
+        .from(".order-card", { autoAlpha: 0, x: 50, duration: 0.75 }, "-=0.62");
+
+      gsap.to(".hero-plate", {
+        y: -34,
+        rotate: 4,
+        scrollTrigger: {
+          trigger: ".hero",
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+        },
+      });
+
+      gsap.to(".floating-chip", {
+        y: "random(-18, 18)",
+        x: "random(-12, 12)",
+        rotate: "random(-12, 12)",
+        repeat: -1,
+        yoyo: true,
+        duration: "random(2.4, 4.6)",
+        ease: "sine.inOut",
+        stagger: 0.18,
+      });
+
+      ScrollTrigger.batch(".reveal", {
+        start: "top 84%",
+        once: true,
+        onEnter: (batch) => {
+          gsap.to(batch, {
+            autoAlpha: 1,
+            y: 0,
+            rotate: 0,
+            duration: 0.8,
+            ease: "power3.out",
+            stagger: 0.09,
+          });
+        },
+      });
+
+      gsap.utils.toArray(".parallax-img").forEach((image) => {
+        gsap.fromTo(
+          image,
+          { yPercent: -7 },
+          {
+            yPercent: 7,
+            ease: "none",
+            scrollTrigger: {
+              trigger: image,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+            },
+          },
+        );
+      });
+
+      gsap.to(".marquee-track", {
+        xPercent: -50,
+        repeat: -1,
+        duration: 24,
+        ease: "none",
+      });
+    }, rootRef);
+
+    return () => context.revert();
+  }, []);
+
+  useEffect(() => {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reducedMotion) {
+      return;
+    }
+
+    gsap.fromTo(
+      ".menu-card",
+      { autoAlpha: 0, y: 24, scale: 0.985 },
+      { autoAlpha: 1, y: 0, scale: 1, stagger: 0.06, duration: 0.45, ease: "power2.out" },
+    );
+  }, [activeCategory, query]);
+
   const closeMenu = () => setMenuOpen(false);
 
-  return (
-    <>
-      <div className={`curtain ${curtainLifted ? "lifted" : ""}`}>
-        <span>JW</span>
-      </div>
+  const updateCart = (id, delta) => {
+    setCart((currentCart) => {
+      const quantity = Math.max(0, (currentCart[id] || 0) + delta);
+      const nextCart = { ...currentCart };
 
-      <nav className={`nav ${scrolled ? "scrolled" : ""}`}>
-        <div className="nav-inner">
-          <div className="nav-crest">Clean Joy Co.</div>
-          <a className="nav-logo" href="#top" onClick={closeMenu}>
-            Jevon <span>Westmoland</span>
-          </a>
-          <div className="nav-right">
-            <ul className="nav-links">
-              {navItems.map(([label, href]) => (
-                <li key={label}>
-                  <a href={href}>{label}</a>
-                </li>
-              ))}
-            </ul>
-            <a className="gold-btn compact" href={sources.gigSalad} target="_blank" rel="noreferrer">
-              Book
+      if (quantity === 0) {
+        delete nextCart[id];
+      } else {
+        nextCart[id] = quantity;
+      }
+
+      return nextCart;
+    });
+  };
+
+  return (
+    <div className="site-shell" ref={rootRef}>
+      <nav className="nav-shell" aria-label="Primary navigation">
+        <a className="brand-mark" href="#top" onClick={closeMenu}>
+          <img src={asset("jr-taco-logo.jpg")} alt="Jr's Tacos logo" />
+          <span>
+            Juniors <strong>Tacos</strong>
+          </span>
+        </a>
+
+        <div className="nav-links" aria-label="Site sections">
+          {navItems.map(([label, href]) => (
+            <a href={href} key={label}>
+              {label}
             </a>
-            <button
-              className={`hamburger ${menuOpen ? "active" : ""}`}
-              type="button"
-              aria-label={menuLabel}
-              aria-expanded={menuOpen}
-              onClick={() => setMenuOpen((open) => !open)}
-            >
-              <span />
-              <span />
-              <span />
-            </button>
-          </div>
+          ))}
+        </div>
+
+        <div className="nav-actions">
+          <a className="ghost-pill" href={sources.cloverMenu} target="_blank" rel="noreferrer">
+            <MapPin size={17} />
+            Saint Peters
+          </a>
+          <a className="order-pill" href={sources.cloverMenu} target="_blank" rel="noreferrer">
+            <ShoppingBag size={17} />
+            Order now
+          </a>
+          <button
+            className="menu-toggle"
+            type="button"
+            aria-label={menuOpen ? "Close navigation" : "Open navigation"}
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((open) => !open)}
+          >
+            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
       </nav>
 
-      <div className={`mobile-menu ${menuOpen ? "active" : ""}`} aria-hidden={!menuOpen}>
-        <ul>
+      <div className={`mobile-drawer ${menuOpen ? "is-open" : ""}`} aria-hidden={!menuOpen}>
+        <div className="mobile-drawer-inner">
           {navItems.map(([label, href]) => (
-            <li key={label}>
-              <a href={href} onClick={closeMenu}>
-                {label}
-              </a>
-            </li>
+            <a href={href} key={label} onClick={closeMenu}>
+              {label}
+              <ChevronRight size={20} />
+            </a>
           ))}
-        </ul>
+          <a href={sources.facebook} target="_blank" rel="noreferrer" onClick={closeMenu}>
+            Facebook
+            <ExternalLink size={19} />
+          </a>
+        </div>
       </div>
 
       <main id="top">
         <section className="hero">
-          <div className="hero-bg">
-            <img src={image("jevon-loony-stage.jpg")} alt="Jevon Westmoland performing on stage" />
+          <div className="hero-bg" aria-hidden="true">
+            <div className="gradient-wash" />
+            <span className="floating-chip chip-one" />
+            <span className="floating-chip chip-two" />
+            <span className="floating-chip chip-three" />
+            <span className="floating-chip chip-four" />
           </div>
-          <div className="hero-side-label">Christian Comedy · St. Louis, MO</div>
-          <div className="container hero-content">
-            <div className="hero-top-row">
-              <div className="hero-eyebrow-group">
-                <span className="live-dot" />
-                <span className="eyebrow">Clean set · Big laugh · Real life</span>
-              </div>
-              <p className="hero-meta-right">
-                <span>Est. 2021</span>
-                Comedian · Actor · Host · Writer
+
+          <div className="hero-content">
+            <div className="hero-copy-block">
+              <p className="hero-kicker">
+                <span />
+                Authentic Mexican food truck
               </p>
-            </div>
-
-            <h1 className="hero-title">
-              <span>{letterize("Jevon")}</span>
-              <span>{letterize("Westmoland")}</span>
-            </h1>
-
-            <div className="hero-bottom">
-              <p className="hero-strapline">
-                Gospel-rooted, family-friendly comedy from a St. Louis storyteller who finds the funny in faith,
-                fatherhood, marriage, and everyday life.
+              <h1 className="hero-title" aria-label="Juniors Tacos">
+                <span className="hero-line">
+                  <span className="hero-word">Juniors</span>
+                </span>
+                <span className="hero-line accent-line">
+                  <span className="hero-word">Tacos</span>
+                </span>
+              </h1>
+              <p className="hero-copy">
+                Real Clover menu prices for tacos, burritos, quesadillas, supreme nachos, sweet tres leches, tamales,
+                sopes, and cold Jarritos in Saint Peters.
               </p>
               <div className="hero-actions">
-                <a className="gold-btn" href={sources.gigSalad} target="_blank" rel="noreferrer">
-                  Book Jevon
+                <a className="primary-btn" href="#menu">
+                  Explore menu
+                  <ArrowRight size={18} />
                 </a>
-                <a className="outline-btn" href={sources.instagram} target="_blank" rel="noreferrer">
-                  Follow @jevon314
+                <a className="secondary-btn" href="#schedule">
+                  Pickup info
+                  <Navigation size={18} />
                 </a>
               </div>
+              <div className="hero-note">
+                <Star size={18} />
+                <span>Online pickup through Clover: Thu-Sat, 10:30am-7:30pm</span>
+              </div>
             </div>
+
+            <div className="hero-plate" aria-label="Featured taco plate">
+              <div className="plate-image">
+                <img src={asset("tacos-hero.jpg")} alt="Two tacos on a black plate with lime" />
+              </div>
+              <div className="plate-badge">
+                <span>Tacos</span>
+                <strong>$4</strong>
+              </div>
+            </div>
+
+            <aside className="order-card">
+              <div>
+                <p className="eyebrow">Quick order</p>
+                <h2>Tacos, nachos, Jarritos. Done.</h2>
+              </div>
+              <a href={sources.cloverMenu} className="order-card-link" target="_blank" rel="noreferrer">
+                Open Clover
+                <ExternalLink size={18} />
+              </a>
+            </aside>
           </div>
         </section>
 
-        <div className="ticker" aria-label="Jevon Westmoland highlights">
-          <div className="ticker-track">
-            {marquee.map((item, index) => (
-              <span key={`${item}-${index}`}>{item}</span>
+        <section className="truck-finder reveal" id="schedule" aria-labelledby="schedule-title">
+          <div className="finder-copy">
+            <p className="eyebrow">Pickup info</p>
+            <h2 id="schedule-title">Order online for pickup in Saint Peters.</h2>
+          </div>
+          <div className="finder-list">
+            {schedule.map((stop) => (
+              <article className="stop-card" key={`${stop.day}-${stop.place}`}>
+                <div>
+                  <span>{stop.day}</span>
+                  <h3>{stop.place}</h3>
+                  <p>{stop.address}</p>
+                </div>
+                <strong>
+                  <Clock size={16} />
+                  {stop.time}
+                </strong>
+              </article>
+            ))}
+          </div>
+          <a className="finder-link" href={sources.cloverMenu} target="_blank" rel="noreferrer">
+            Order online
+            <ExternalLink size={18} />
+          </a>
+        </section>
+
+        <div className="marquee" aria-hidden="true">
+          <div className="marquee-track">
+            {["Street tacos", "Quesadillas", "Nachos supreme", "Jarritos", "Tres leches", "Catering"].map((item) => (
+              <span key={item}>{item}</span>
+            ))}
+            {["Street tacos", "Quesadillas", "Nachos supreme", "Jarritos", "Tres leches", "Catering"].map((item) => (
+              <span key={`${item}-repeat`}>{item}</span>
             ))}
           </div>
         </div>
 
-        <section className="block single-feature" id="story">
-          <div className="container feature-grid">
-            <div className="feature-media reveal">
-              <img src={image("jevon-plaid.jpg")} alt="Portrait of Jevon Westmoland" />
-              <div className="image-caption">Frostwood roots · St. Louis voice</div>
-            </div>
-            <div className="feature-copy reveal">
-              <p className="section-kicker">I · The Story</p>
-              <h2 className="section-title">From open mics to rooms that know his name.</h2>
-              <p>
-                Jevon started stand-up in October 2021 and quickly built a lane around clean storytelling, sharp
-                observation, and crowd connection. His material stays rooted in real life: being a son, brother, husband,
-                father, and believer.
-              </p>
-              <p>
-                He has hosted and performed in clubs across the Midwest and beyond, including Helium, Funny Bone, and
-                Loony Bin rooms, while sharing stages with veteran and rising comics.
-              </p>
-              <div className="stat-row">
-                <div>
-                  <strong>5.0</strong>
-                  <span>Audience rating</span>
-                </div>
-                <div>
-                  <strong>2021</strong>
-                  <span>First open mic</span>
-                </div>
-                <div>
-                  <strong>200 mi</strong>
-                  <span>Travel radius listed</span>
-                </div>
-              </div>
-              <a className="text-link" href={sources.boldJourney} target="_blank" rel="noreferrer">
-                Read the press story
-              </a>
-            </div>
+        <section className="offers-section" id="offers" aria-labelledby="offers-title">
+          <div className="section-heading reveal">
+            <p className="eyebrow">Fresh drops</p>
+            <h2 id="offers-title">Big-deal energy, taco truck soul.</h2>
+            <p>
+              Start with street tacos, share the nachos, chase it with Jarritos, then keep the schedule close for the
+              next stop.
+            </p>
           </div>
-        </section>
 
-        <section className="scripture-band">
-          <div className="container">
-            <p>✦ Proverbs 17:22 ✦</p>
-            <h2>A cheerful heart is good medicine.</h2>
-          </div>
-        </section>
-
-        <section className="block" id="shows">
-          <div className="container">
-            <div className="section-head reveal">
-              <p className="section-kicker">II · The Stage</p>
-              <h2 className="section-title">Comedy built for church nights, clubs, corporate rooms, and family events.</h2>
-              <a className="text-link" href={sources.gigSalad} target="_blank" rel="noreferrer">
-                Request a quote
-              </a>
-            </div>
-
-            <div className="show-grid">
-              {[
-                ["Clean Stand-Up", "Family and work-friendly comedy with storytelling at the center."],
-                ["Hosting", "A steady, quick room presence for showcases, church programs, clubs, and private events."],
-                ["A Fresh Pair of Jays", "A comedy collaboration and podcast with Jason Jenkins built around two Midwest voices."],
-                ["Acting & Writing", "Screen-forward creative work, sketches, scripts, and character-driven ideas."],
-              ].map(([title, text], index) => (
-                <article className="show-card reveal" style={{ "--delay": `${index * 80}ms` }} key={title}>
-                  <span>0{index + 1}</span>
-                  <h3>{title}</h3>
-                  <p>{text}</p>
+          <div className="offer-grid">
+            {offers.map((offer, index) => {
+              const Icon = offer.icon;
+              return (
+                <article className="offer-card reveal" style={{ "--delay": `${index * 90}ms` }} key={offer.title}>
+                  <div className="offer-icon">
+                    <Icon size={24} />
+                  </div>
+                  <p>{offer.eyebrow}</p>
+                  <h3>{offer.title}</h3>
+                  <span>{offer.copy}</span>
+                  <a
+                    href={index === 1 ? sources.cloverMenu : index === 2 ? "#schedule" : "#menu"}
+                    target={index === 1 ? "_blank" : undefined}
+                    rel={index === 1 ? "noreferrer" : undefined}
+                  >
+                    {offer.action}
+                    {index === 1 ? <ExternalLink size={18} /> : <ArrowRight size={18} />}
+                  </a>
                 </article>
-              ))}
+              );
+            })}
+          </div>
+        </section>
+
+        <section className="feature-band" aria-label="Featured food">
+          <div className="feature-media reveal">
+            <img className="parallax-img" src={asset("quesadilla-table.jpg")} alt="Cut quesadilla with salsa" />
+          </div>
+          <div className="feature-copy reveal">
+            <p className="eyebrow">Made for the window</p>
+            <h2>Hot griddles, melty cheese, salsa on standby.</h2>
+            <p>
+              From the first lime squeeze to the last chip, Juniors keeps the good stuff simple: warm tortillas, loaded
+              trays, cold drinks, and enough flavor to make a quick stop feel like a plan.
+            </p>
+            <div className="feature-stats">
+              <span>
+                <strong>Mexican</strong>
+                Saint Peters
+              </span>
+              <span>
+                <strong>Thu-Sat</strong>
+                Clover pickup
+              </span>
+              <span>
+                <strong>$4</strong>
+                Street tacos
+              </span>
             </div>
           </div>
         </section>
 
-        <section className="block visual-stack" id="video">
-          <div className="container visual-grid">
-            <div className="visual-copy reveal">
-              <p className="section-kicker">III · The Screen</p>
-              <h2 className="section-title">The laugh lands clean. The room still shakes.</h2>
-              <p>
-                Jevon’s clips and live moments are shaped for multi-generational audiences: church folks, club crowds,
-                family reunions, and workplaces that want a show without the side-eye.
-              </p>
-              <div className="button-row">
-                <a className="gold-btn" href={sources.instagram} target="_blank" rel="noreferrer">
-                  Watch Clips
-                </a>
-                <a className="outline-btn" href={sources.loonyBin} target="_blank" rel="noreferrer">
-                  A Fresh Pair of Jays
-                </a>
+        <section className="menu-section" id="menu" aria-labelledby="menu-title">
+          <div className="section-heading reveal">
+            <p className="eyebrow">The menu</p>
+            <h2 id="menu-title">Pick your lane. Then add the good stuff.</h2>
+            <p>Real Clover menu items, prices, options, and availability. Final checkout happens on Clover.</p>
+          </div>
+
+          <div className="menu-toolbar reveal">
+            <div className="category-tabs" role="tablist" aria-label="Menu categories">
+              {categories.map((category) => (
+                <button
+                  className={activeCategory === category ? "is-active" : ""}
+                  type="button"
+                  role="tab"
+                  aria-selected={activeCategory === category}
+                  onClick={() => setActiveCategory(category)}
+                  key={category}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+
+            <label className="menu-search">
+              <Search size={18} />
+              <input
+                type="search"
+                placeholder="Search menu"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+              />
+            </label>
+          </div>
+
+          <div className="menu-layout">
+            <div className="menu-grid" aria-live="polite">
+              {filteredMenu.length > 0 ? (
+                filteredMenu.map((item) => (
+                  <article className={`menu-card ${item.available === false ? "is-unavailable" : ""}`} key={item.id}>
+                    <div className="menu-card-image">
+                      <img src={item.image} alt="" />
+                      <span>{item.available === false ? "Unavailable" : item.badge}</span>
+                    </div>
+                    <div className="menu-card-body">
+                      <div className="menu-card-title">
+                        <div>
+                          <p>{item.category}</p>
+                          <h3>{item.name}</h3>
+                        </div>
+                        <strong>{formatPrice(item.price)}</strong>
+                      </div>
+                      <p>{item.description}</p>
+                      {item.options?.length ? (
+                        <div className="option-list" aria-label={`${item.name} options`}>
+                          {item.options.slice(0, 5).map((option) => (
+                            <span key={option}>{option}</span>
+                          ))}
+                          {item.options.length > 5 ? <span>+{item.options.length - 5} more</span> : null}
+                        </div>
+                      ) : null}
+                      <div className="quantity-row">
+                        <button
+                          type="button"
+                          aria-label={`Remove ${item.name}`}
+                          onClick={() => updateCart(item.id, -1)}
+                          disabled={!cart[item.id] || item.available === false}
+                        >
+                          <Minus size={16} />
+                        </button>
+                        <span>{cart[item.id] || 0}</span>
+                        <button
+                          type="button"
+                          aria-label={`Add ${item.name}`}
+                          onClick={() => updateCart(item.id, 1)}
+                          disabled={item.available === false}
+                        >
+                          <Plus size={16} />
+                        </button>
+                      </div>
+                      {item.available === false ? (
+                        <span className="item-order-link disabled">Currently unavailable on Clover</span>
+                      ) : (
+                        <a className="item-order-link" href={item.orderUrl} target="_blank" rel="noreferrer">
+                          Order this item on Clover
+                          <ExternalLink size={15} />
+                        </a>
+                      )}
+                    </div>
+                  </article>
+                ))
+              ) : (
+                <div className="empty-menu">
+                  <Utensils size={30} />
+                  <p>No menu items matched that search.</p>
+                </div>
+              )}
+            </div>
+
+            <aside className="cart-panel reveal" aria-label="Order tray">
+              <div className="cart-panel-head">
+                <div>
+                  <p className="eyebrow">Your tray</p>
+                  <h3>{totalItems ? `${totalItems} item${totalItems > 1 ? "s" : ""}` : "Ready when you are"}</h3>
+                </div>
+                <ShoppingBag size={24} />
               </div>
-            </div>
 
-            <div className="video-wall reveal">
-              <video src={image("jevon-room-clip.mp4")} autoPlay muted loop playsInline />
-            </div>
-          </div>
-        </section>
+              {cartLines.length > 0 ? (
+                <div className="cart-lines">
+                  {cartLines.map((item) => (
+                    <div className="cart-line" key={item.id}>
+                      <span>
+                        {item.quantity}x {item.name}
+                      </span>
+                      <strong>{formatPrice(item.quantity * item.price)}</strong>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="cart-empty">Add available favorites here for an estimate, then place the real order on Clover.</p>
+              )}
 
-        <section className="block gallery-block">
-          <div className="container">
-            <div className="section-head reveal">
-              <p className="section-kicker">IV · The Room</p>
-              <h2 className="section-title">Documented by the people who booked him.</h2>
-              <p>
-                Verified audiences describe Jevon as professional, punctual, personable, and clean-funny enough to bring
-                back.
-              </p>
-            </div>
-            <div className="gallery">
-              <img className="reveal" src={image("jevon-blue-smile.jpg")} alt="Jevon smiling with a microphone" />
-              <img className="reveal" src={image("jevon-headshot.jpg")} alt="Jevon Westmoland headshot" />
-              <img className="reveal" src={image("jevon-mic-hoodie.jpg")} alt="Jevon performing on stage" />
-            </div>
-          </div>
-        </section>
-
-        <section className="block store-block" id="store">
-          <div className="container store-grid">
-            <div className="store-copy reveal">
-              <p className="section-kicker">V · The Store</p>
-              <h2 className="section-title">Blessed God’s Favorite.</h2>
-              <p>
-                Faith-forward apparel with bold colorways, cozy hoodies, and praise-coded everyday wear. The current
-                collection includes Divine Favor, Glory Light, Favor & Fire, and more.
-              </p>
-              <a className="gold-btn" href={sources.store} target="_blank" rel="noreferrer">
-                Shop the Collection
+              <div className="cart-total">
+                <span>Estimated total</span>
+                <strong>{formatPrice(cartTotal)}</strong>
+              </div>
+              <a className="primary-btn full-btn" href={sources.cloverMenu} target="_blank" rel="noreferrer">
+                Place order on Clover
+                <ExternalLink size={18} />
               </a>
-            </div>
-            <div className="product-rail reveal">
-              {[
-                ["blessed-cream.png", "Divine Favor"],
-                ["blessed-gold.png", "Glory Light"],
-                ["blessed-fire.png", "Favor & Fire"],
-              ].map(([file, title]) => (
-                <a href={sources.store} target="_blank" rel="noreferrer" className="product" key={title}>
-                  <img src={image(file)} alt={`${title} hoodie`} />
-                  <span>{title}</span>
-                </a>
+            </aside>
+          </div>
+        </section>
+
+        <section className="story-section" id="story">
+          <div className="story-copy reveal">
+            <p className="eyebrow">Neighborhood flavor</p>
+            <h2>Authentic Mexican street food, with the kind of logo you remember.</h2>
+            <p>
+              Juniors Tacos is listed as a Saint Peters Mexican food truck with pickup ordering through Clover. This
+              page keeps the browsing friendly while every order button sends customers to Clover for the real item,
+              options, availability, payment, and pickup timing.
+            </p>
+            <div className="review-strip">
+              {reviews.map((review) => (
+                <span key={review}>
+                  <Heart size={16} />
+                  {review}
+                </span>
               ))}
             </div>
           </div>
-        </section>
-
-        <section className="block press-block">
-          <div className="container">
-            <div className="section-head reveal">
-              <p className="section-kicker">VI · The Record</p>
-              <h2 className="section-title">Press, platforms, and receipts.</h2>
-            </div>
-            <div className="press-grid">
-              <a className="press-card reveal" href={sources.canvasRebel} target="_blank" rel="noreferrer">
-                <span>CanvasRebel</span>
-                <h3>Started when God saw fit.</h3>
-                <p>On timing, creative courage, writing daily, and building a comedy voice.</p>
-              </a>
-              <a className="press-card reveal" href={sources.boldJourney} target="_blank" rel="noreferrer">
-                <span>Bold Journey</span>
-                <h3>Work ethic as a promise.</h3>
-                <p>On reading, writing, networking, and learning the craft without shortcuts.</p>
-              </a>
-              <a className="press-card reveal" href={sources.loonyBin} target="_blank" rel="noreferrer">
-                <span>Loony Bin</span>
-                <h3>A Fresh Pair of Jays.</h3>
-                <p>A clean comedic journey with multigenerational reach and Midwest roots.</p>
-              </a>
-            </div>
+          <div className="logo-showcase reveal">
+            <img src={asset("jr-taco-logo.jpg")} alt="Jr's Tacos smiling green logo" />
           </div>
         </section>
 
-        <section className="book-section" id="book">
-          <div className="container book-inner reveal">
-            <p>✦ Keep the room laughing ✦</p>
-            <h2>Bring Jevon to your next church event, gala, club night, company program, or private celebration.</h2>
-            <div className="booking-actions">
-              <a className="gold-btn" href={sources.gigSalad} target="_blank" rel="noreferrer">
-                Book the Show
+        <section className="catering-section" id="catering" aria-labelledby="catering-title">
+          <div className="catering-bg">
+            <img className="parallax-img" src={asset("nachos-share.jpg")} alt="" />
+          </div>
+          <div className="catering-content reveal">
+            <p className="eyebrow">Order online</p>
+            <h2 id="catering-title">Browse here. Checkout safely on Clover.</h2>
+            <p>
+              The local tray gives a quick estimate, then Clover handles modifiers, scheduled pickup, Apple Pay, Google
+              Pay, gift cards, and card checkout.
+            </p>
+            <div className="catering-actions">
+              <a className="primary-btn" href={sources.cloverMenu} target="_blank" rel="noreferrer">
+                Order pickup
+                <CalendarDays size={18} />
               </a>
-              <a className="outline-btn" href={sources.linkedin} target="_blank" rel="noreferrer">
-                Connect on LinkedIn
+              <a className="secondary-btn" href={sources.facebook} target="_blank" rel="noreferrer">
+                Facebook page
+                <ExternalLink size={18} />
               </a>
             </div>
           </div>
@@ -375,39 +1268,29 @@ function App() {
       </main>
 
       <footer className="footer">
-        <div className="container footer-grid">
+        <div className="footer-brand">
+          <img src={asset("jr-taco-logo.jpg")} alt="" />
           <div>
-            <a className="footer-logo" href="#top">
-              JW
-            </a>
-            <p>Clean Christian comedy, storytelling, hosting, acting, writing, and joy for rooms that need it.</p>
-          </div>
-          <div>
-            <h4>Work</h4>
-            <a href="#story">Story</a>
-            <a href="#shows">Shows</a>
-            <a href="#video">Video</a>
-            <a href="#store">Store</a>
-          </div>
-          <div>
-            <h4>Connect</h4>
-            <a href={sources.instagram} target="_blank" rel="noreferrer">
-              Instagram
-            </a>
-            <a href={sources.linkedin} target="_blank" rel="noreferrer">
-              LinkedIn
-            </a>
-            <a href={sources.gigSalad} target="_blank" rel="noreferrer">
-              Booking
-            </a>
+            <strong>Juniors Tacos</strong>
+            <span>Saint Peters Mexican food truck</span>
           </div>
         </div>
-        <div className="container footer-bottom">
-          <span>© 2026 Jevon Westmoland</span>
-          <span>Built by Jimmie Miller - Altared Alchemie AI Services</span>
+        <div className="footer-links">
+          <a href={sources.cloverMenu} target="_blank" rel="noreferrer">
+            Clover menu
+          </a>
+          <a href={sources.streetFoodFinder} target="_blank" rel="noreferrer">
+            StreetFoodFinder
+          </a>
+          <a href={sources.stlFoodTrucks} target="_blank" rel="noreferrer">
+            St. Louis Food Trucks
+          </a>
+          <a href={sources.facebook} target="_blank" rel="noreferrer">
+            Facebook
+          </a>
         </div>
       </footer>
-    </>
+    </div>
   );
 }
 
