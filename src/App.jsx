@@ -9,19 +9,23 @@ import {
   Heart,
   MapPin,
   Menu,
+  Mic,
   Minus,
   Navigation,
   Plus,
+  Save,
   Search,
   ShoppingBag,
   Sparkles,
   Star,
+  Trash2,
   Truck,
   Utensils,
   X,
 } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { defaultSchedule, parseScheduleText, sanitizeSchedule } from "./scheduleTools";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -671,33 +675,6 @@ const offers = [
   },
 ];
 
-const schedule = [
-  {
-    day: "Thu",
-    place: "Pickup ordering",
-    address: "5 Auchly Lane, Saint Peters, MO 63376",
-    time: "10:30am-7:30pm",
-  },
-  {
-    day: "Fri",
-    place: "Pickup ordering",
-    address: "5 Auchly Lane, Saint Peters, MO 63376",
-    time: "10:30am-7:30pm",
-  },
-  {
-    day: "Sat",
-    place: "Pickup ordering",
-    address: "5 Auchly Lane, Saint Peters, MO 63376",
-    time: "10:30am-7:30pm",
-  },
-  {
-    day: "Online",
-    place: "Clover checkout",
-    address: "Pickup only. Delivery and curbside are currently disabled in Clover.",
-    time: "10 min lead",
-  },
-];
-
 const reviews = [
   "Online ordering powered by Clover",
   "Pickup: Thu-Sat, 10:30am-7:30pm",
@@ -716,12 +693,50 @@ function getFilteredItems(category) {
   return menuItems.filter((item) => item.category === category);
 }
 
+const scheduleStorageKey = "juniors-tacos-location-schedule";
+const sampleSchedulePrompt =
+  "Tuesday at O'Fallon Brewery 11am-2pm\nThursday at Saint Peters City Hall 5pm-8pm\nSaturday at Farmers Market 10am-3pm";
+
+function loadStoredSchedule() {
+  if (typeof window === "undefined") {
+    return defaultSchedule;
+  }
+
+  try {
+    const storedSchedule = JSON.parse(window.localStorage.getItem(scheduleStorageKey) || "null");
+    return Array.isArray(storedSchedule) && storedSchedule.length ? sanitizeSchedule(storedSchedule) : defaultSchedule;
+  } catch {
+    return defaultSchedule;
+  }
+}
+
+function formatScheduleDate(date) {
+  if (!date) {
+    return "";
+  }
+
+  const parsedDate = new Date(`${date}T12:00:00`);
+
+  if (Number.isNaN(parsedDate.getTime())) {
+    return "";
+  }
+
+  return new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric" }).format(parsedDate);
+}
+
 function App() {
   const rootRef = useRef(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState("Popular");
   const [cart, setCart] = useState({});
   const [query, setQuery] = useState("");
+  const [scheduleStops, setScheduleStops] = useState(loadStoredSchedule);
+  const [adminText, setAdminText] = useState(sampleSchedulePrompt);
+  const [draftSchedule, setDraftSchedule] = useState([]);
+  const [adminStatus, setAdminStatus] = useState("Ready to draft a weekly location update.");
+  const [adminToken, setAdminToken] = useState("");
+  const [isListening, setIsListening] = useState(false);
+  const recognitionRef = useRef(null);
 
   const filteredMenu = useMemo(() => {
     const base = getFilteredItems(activeCategory);
@@ -747,6 +762,29 @@ function App() {
 
   const totalItems = cartLines.reduce((sum, item) => sum + item.quantity, 0);
   const cartTotal = cartLines.reduce((sum, item) => sum + item.quantity * item.price, 0);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    fetch("/api/schedule")
+      .then((response) => (response.ok ? response.json() : null))
+      .then((data) => {
+        if (isMounted && data?.schedule?.length) {
+          const hasLocalSchedule = Boolean(window.localStorage.getItem(scheduleStorageKey));
+
+          if (data.source !== "default" || !hasLocalSchedule) {
+            setScheduleStops(sanitizeSchedule(data.schedule));
+          }
+        }
+      })
+      .catch(() => {
+        // The Vite dev server does not run Vercel Functions. Local schedule state keeps previews usable.
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
@@ -862,6 +900,161 @@ function App() {
 
       return nextCart;
     });
+  };
+
+  const buildScheduleDraft = async () => {
+    const trimmedText = adminText.trim();
+
+    if (!trimmedText) {
+      setAdminStatus("Add a schedule update before generating a draft.");
+      return;
+    }
+
+    setAdminStatus("Building a draft schedule...");
+
+    try {
+      const response = await fetch("/api/parse-schedule", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: trimmedText }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const generatedSchedule = sanitizeSchedule(data.schedule);
+
+        if (generatedSchedule.length) {
+          setDraftSchedule(generatedSchedule);
+          setAdminStatus(`Draft ready from ${data.source || "schedule parser"}. Review before publishing.`);
+          return;
+        }
+      }
+    } catch {
+      // Vite's dev server does not run Vercel Functions, so the local parser keeps the prototype usable.
+    }
+
+    const localDraft = parseScheduleText(trimmedText);
+    setDraftSchedule(localDraft);
+    setAdminStatus("Draft ready from the local parser. Review before publishing.");
+  };
+
+  const updateDraftStop = (id, field, value) => {
+    setDraftSchedule((currentDraft) =>
+      currentDraft.map((stop) => (stop.id === id ? { ...stop, [field]: value } : stop)),
+    );
+  };
+
+  const addDraftStop = () => {
+    setDraftSchedule((currentDraft) => [
+      ...currentDraft,
+      {
+        id: `manual-${Date.now()}`,
+        day: "Day",
+        date: "",
+        place: "New stop",
+        address: "Address TBD",
+        time: "Time TBD",
+        note: "",
+      },
+    ]);
+    setAdminStatus("Manual stop added to the draft.");
+  };
+
+  const removeDraftStop = (id) => {
+    setDraftSchedule((currentDraft) => currentDraft.filter((stop) => stop.id !== id));
+    setAdminStatus("Stop removed from the draft.");
+  };
+
+  const publishDraftSchedule = async () => {
+    const cleanDraft = sanitizeSchedule(draftSchedule);
+
+    if (!cleanDraft.length) {
+      setAdminStatus("Generate or add at least one stop before publishing.");
+      return;
+    }
+
+    setScheduleStops(cleanDraft);
+    window.localStorage.setItem(scheduleStorageKey, JSON.stringify(cleanDraft));
+
+    if (!adminToken.trim()) {
+      setAdminStatus("Published in this browser. Add the backend admin passcode to publish shared live updates.");
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/schedule", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-token": adminToken.trim(),
+        },
+        body: JSON.stringify({ schedule: cleanDraft }),
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        setAdminStatus(data.error || "The shared backend did not accept this schedule yet.");
+        return;
+      }
+
+      setAdminStatus("Published. The shared live pickup schedule has been updated.");
+    } catch {
+      setAdminStatus("Published in this browser. Shared backend publishing is not available in local preview.");
+    }
+  };
+
+  const resetSchedule = () => {
+    setScheduleStops(defaultSchedule);
+    setDraftSchedule([]);
+    window.localStorage.removeItem(scheduleStorageKey);
+    setAdminStatus("Schedule reset to the default Clover pickup information.");
+  };
+
+  const dictateSchedule = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      setAdminStatus("Voice dictation is not available in this browser.");
+      return;
+    }
+
+    if (isListening) {
+      recognitionRef.current?.stop();
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognitionRef.current = recognition;
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = "en-US";
+
+    recognition.onstart = () => {
+      setIsListening(true);
+      setAdminStatus("Listening for a schedule update...");
+    };
+
+    recognition.onresult = (event) => {
+      const transcript = Array.from(event.results)
+        .map((result) => result[0]?.transcript || "")
+        .join(" ")
+        .trim();
+
+      if (transcript) {
+        setAdminText((currentText) => `${currentText.trim()}\n${transcript}`.trim());
+        setAdminStatus("Dictation added. Generate a draft when ready.");
+      }
+    };
+
+    recognition.onerror = () => {
+      setAdminStatus("Dictation stopped before a schedule update was captured.");
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognition.start();
   };
 
   return (
@@ -988,15 +1181,16 @@ function App() {
         <section className="truck-finder reveal" id="schedule" aria-labelledby="schedule-title">
           <div className="finder-copy">
             <p className="eyebrow">Pickup info</p>
-            <h2 id="schedule-title">Order online for pickup in Saint Peters.</h2>
+            <h2 id="schedule-title">Catch the truck this week.</h2>
           </div>
           <div className="finder-list">
-            {schedule.map((stop) => (
+            {scheduleStops.map((stop) => (
               <article className="stop-card" key={`${stop.day}-${stop.place}`}>
                 <div>
-                  <span>{stop.day}</span>
+                  <span>{[stop.day, formatScheduleDate(stop.date)].filter(Boolean).join(" ")}</span>
                   <h3>{stop.place}</h3>
                   <p>{stop.address}</p>
+                  {stop.note ? <em>{stop.note}</em> : null}
                 </div>
                 <strong>
                   <Clock size={16} />
@@ -1009,6 +1203,146 @@ function App() {
             Order online
             <ExternalLink size={18} />
           </a>
+        </section>
+
+        <section className="admin-section" id="admin" aria-labelledby="admin-title">
+          <div className="admin-shell">
+            <div className="section-heading admin-heading">
+              <div>
+                <p className="eyebrow">Owner admin preview</p>
+                <h2 id="admin-title">Location Schedule Admin</h2>
+              </div>
+              <p>
+                Type or dictate the weekly stops, review the draft, then publish the schedule into the public pickup
+                cards.
+              </p>
+            </div>
+
+            <div className="admin-grid">
+              <div className="admin-panel">
+                <label className="admin-field">
+                  <span>Weekly update</span>
+                  <textarea
+                    value={adminText}
+                    onChange={(event) => setAdminText(event.target.value)}
+                    rows={8}
+                    placeholder="Tuesday at O'Fallon Brewery 11am-2pm"
+                  />
+                </label>
+
+                <label className="admin-field compact-field">
+                  <span>Backend admin passcode</span>
+                  <input
+                    type="password"
+                    value={adminToken}
+                    onChange={(event) => setAdminToken(event.target.value)}
+                    placeholder="Required for shared live publishing"
+                  />
+                </label>
+
+                <div className="admin-actions">
+                  <button className="secondary-btn" type="button" onClick={dictateSchedule}>
+                    <Mic size={18} />
+                    {isListening ? "Stop listening" : "Dictate"}
+                  </button>
+                  <button className="primary-btn" type="button" onClick={buildScheduleDraft}>
+                    <Sparkles size={18} />
+                    Generate draft
+                  </button>
+                </div>
+
+                <p className="admin-status">{adminStatus}</p>
+              </div>
+
+              <div className="admin-panel">
+                <div className="admin-panel-head">
+                  <div>
+                    <p className="eyebrow">Review</p>
+                    <h3>Draft stops</h3>
+                  </div>
+                  <button className="secondary-btn compact-btn" type="button" onClick={addDraftStop}>
+                    <Plus size={17} />
+                    Add stop
+                  </button>
+                </div>
+
+                <div className="draft-list">
+                  {draftSchedule.length ? (
+                    draftSchedule.map((stop) => (
+                      <article className="draft-stop" key={stop.id}>
+                        <div className="draft-stop-head">
+                          <strong>{stop.place}</strong>
+                          <button type="button" aria-label={`Remove ${stop.place}`} onClick={() => removeDraftStop(stop.id)}>
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                        <div className="draft-fields">
+                          <label>
+                            <span>Day</span>
+                            <input
+                              value={stop.day}
+                              onChange={(event) => updateDraftStop(stop.id, "day", event.target.value)}
+                            />
+                          </label>
+                          <label>
+                            <span>Date</span>
+                            <input
+                              type="date"
+                              value={stop.date}
+                              onChange={(event) => updateDraftStop(stop.id, "date", event.target.value)}
+                            />
+                          </label>
+                          <label>
+                            <span>Time</span>
+                            <input
+                              value={stop.time}
+                              onChange={(event) => updateDraftStop(stop.id, "time", event.target.value)}
+                            />
+                          </label>
+                          <label>
+                            <span>Place</span>
+                            <input
+                              value={stop.place}
+                              onChange={(event) => updateDraftStop(stop.id, "place", event.target.value)}
+                            />
+                          </label>
+                          <label className="wide-field">
+                            <span>Address</span>
+                            <input
+                              value={stop.address}
+                              onChange={(event) => updateDraftStop(stop.id, "address", event.target.value)}
+                            />
+                          </label>
+                          <label className="wide-field">
+                            <span>Note</span>
+                            <input
+                              value={stop.note}
+                              onChange={(event) => updateDraftStop(stop.id, "note", event.target.value)}
+                            />
+                          </label>
+                        </div>
+                      </article>
+                    ))
+                  ) : (
+                    <div className="admin-empty">
+                      <CalendarDays size={28} />
+                      <span>No draft yet.</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="admin-actions admin-actions-bottom">
+                  <button className="primary-btn" type="button" onClick={publishDraftSchedule}>
+                    <Save size={18} />
+                    Publish schedule
+                  </button>
+                  <button className="secondary-btn" type="button" onClick={resetSchedule}>
+                    Reset default
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
 
         <div className="marquee" aria-hidden="true">
