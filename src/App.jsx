@@ -735,6 +735,7 @@ function App() {
   const [draftSchedule, setDraftSchedule] = useState([]);
   const [adminStatus, setAdminStatus] = useState("Ready to draft a weekly location update.");
   const [adminToken, setAdminToken] = useState("");
+  const [publishState, setPublishState] = useState("idle");
   const [isListening, setIsListening] = useState(false);
   const recognitionRef = useRef(null);
 
@@ -904,6 +905,7 @@ function App() {
 
   const buildScheduleDraft = async () => {
     const trimmedText = adminText.trim();
+    setPublishState("idle");
 
     if (!trimmedText) {
       setAdminStatus("Add a schedule update before generating a draft.");
@@ -939,12 +941,14 @@ function App() {
   };
 
   const updateDraftStop = (id, field, value) => {
+    setPublishState("idle");
     setDraftSchedule((currentDraft) =>
       currentDraft.map((stop) => (stop.id === id ? { ...stop, [field]: value } : stop)),
     );
   };
 
   const addDraftStop = () => {
+    setPublishState("idle");
     setDraftSchedule((currentDraft) => [
       ...currentDraft,
       {
@@ -961,6 +965,7 @@ function App() {
   };
 
   const removeDraftStop = (id) => {
+    setPublishState("idle");
     setDraftSchedule((currentDraft) => currentDraft.filter((stop) => stop.id !== id));
     setAdminStatus("Stop removed from the draft.");
   };
@@ -969,14 +974,17 @@ function App() {
     const cleanDraft = sanitizeSchedule(draftSchedule);
 
     if (!cleanDraft.length) {
+      setPublishState("idle");
       setAdminStatus("Generate or add at least one stop before publishing.");
       return;
     }
 
+    setPublishState("publishing");
     setScheduleStops(cleanDraft);
     window.localStorage.setItem(scheduleStorageKey, JSON.stringify(cleanDraft));
 
     if (!adminToken.trim()) {
+      setPublishState("idle");
       setAdminStatus("Published in this browser. Add the backend admin passcode to publish shared live updates.");
       return;
     }
@@ -993,17 +1001,21 @@ function App() {
       const data = await response.json();
 
       if (!response.ok) {
+        setPublishState("idle");
         setAdminStatus(data.error || "The shared backend did not accept this schedule yet.");
         return;
       }
 
+      setPublishState("success");
       setAdminStatus("Published. The shared live pickup schedule has been updated.");
     } catch {
+      setPublishState("idle");
       setAdminStatus("Published in this browser. Shared backend publishing is not available in local preview.");
     }
   };
 
   const resetSchedule = () => {
+    setPublishState("idle");
     setScheduleStops(defaultSchedule);
     setDraftSchedule([]);
     window.localStorage.removeItem(scheduleStorageKey);
@@ -1041,6 +1053,7 @@ function App() {
         .trim();
 
       if (transcript) {
+        setPublishState("idle");
         setAdminText((currentText) => `${currentText.trim()}\n${transcript}`.trim());
         setAdminStatus("Dictation added. Generate a draft when ready.");
       }
@@ -1332,9 +1345,18 @@ function App() {
                 </div>
 
                 <div className="admin-actions admin-actions-bottom">
-                  <button className="primary-btn" type="button" onClick={publishDraftSchedule}>
+                  <button
+                    className={`primary-btn publish-btn ${publishState === "success" ? "is-published" : ""}`}
+                    type="button"
+                    onClick={publishDraftSchedule}
+                    disabled={publishState === "publishing"}
+                  >
                     <Save size={18} />
-                    Publish schedule
+                    {publishState === "success"
+                      ? "Schedule Published"
+                      : publishState === "publishing"
+                        ? "Publishing..."
+                        : "Publish schedule"}
                   </button>
                   <button className="secondary-btn" type="button" onClick={resetSchedule}>
                     Reset default

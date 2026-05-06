@@ -749,6 +749,22 @@ img {
   cursor: pointer;
 }
 
+.admin-actions button:disabled {
+  cursor: progress;
+  opacity: 0.78;
+}
+
+.publish-btn.is-published {
+  color: var(--paper);
+  border-color: #176a3e;
+  background: linear-gradient(180deg, #2fa568, #176a3e);
+  box-shadow: 0 14px 28px rgba(31, 122, 74, 0.24);
+}
+
+.publish-btn.is-published:hover {
+  box-shadow: 0 18px 34px rgba(31, 122, 74, 0.32);
+}
+
 .admin-status {
   margin: 0;
   padding: 0.78rem;
