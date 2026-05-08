@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/catering",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/reviews",
+      "destination": "/index.html"
+    }
+  ]
+}
