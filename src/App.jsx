@@ -26,6 +26,7 @@ import {
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { defaultSchedule, parseScheduleText, sanitizeSchedule } from "./scheduleTools";
+import { Analytics } from "@vercel/analytics/react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -1646,6 +1647,7 @@ function App() {
           </a>
         </div>
       </footer>
+      <Analytics />
     </div>
   );
 }
