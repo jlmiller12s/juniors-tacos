@@ -56,6 +56,12 @@ const sources = {
 const contactPhone = "+16365798569";
 const siteUrl = "https://jrstacosstl.com";
 const seoImage = `${siteUrl}/assets/tacos-hero.jpg`;
+const siteMode = "coming-soon";
+const comingSoonMeta = {
+  title: "Coming Soon | Juniors Tacos",
+  description: "Juniors Tacos official site is coming soon.",
+  image: `${siteUrl}/assets/coming-soon-bg.jpg`,
+};
 
 const seoPages = {
   "/": {
@@ -97,9 +103,94 @@ function upsertHeadElement(selector, createElement, attributes = {}) {
   return element;
 }
 
-function buildStructuredData(routePath) {
+function ComingSoonPage() {
+  useEffect(() => {
+    document.documentElement.lang = "en";
+    document.title = comingSoonMeta.title;
+
+    upsertHeadElement('meta[name="description"]', () => document.createElement("meta"), {
+      name: "description",
+      content: comingSoonMeta.description,
+    });
+    upsertHeadElement('link[rel="canonical"]', () => document.createElement("link"), {
+      rel: "canonical",
+      href: `${siteUrl}/`,
+    });
+    upsertHeadElement('meta[property="og:title"]', () => document.createElement("meta"), {
+      property: "og:title",
+      content: comingSoonMeta.title,
+    });
+    upsertHeadElement('meta[property="og:description"]', () => document.createElement("meta"), {
+      property: "og:description",
+      content: comingSoonMeta.description,
+    });
+    upsertHeadElement('meta[property="og:image"]', () => document.createElement("meta"), {
+      property: "og:image",
+      content: comingSoonMeta.image,
+    });
+    upsertHeadElement('meta[property="og:image:alt"]', () => document.createElement("meta"), {
+      property: "og:image:alt",
+      content: "Juniors Tacos team smiling from the pickup window",
+    });
+    upsertHeadElement('meta[name="twitter:title"]', () => document.createElement("meta"), {
+      name: "twitter:title",
+      content: comingSoonMeta.title,
+    });
+    upsertHeadElement('meta[name="twitter:description"]', () => document.createElement("meta"), {
+      name: "twitter:description",
+      content: comingSoonMeta.description,
+    });
+    upsertHeadElement('meta[name="twitter:image"]', () => document.createElement("meta"), {
+      name: "twitter:image",
+      content: comingSoonMeta.image,
+    });
+
+    const structuredDataScript = upsertHeadElement("#site-structured-data", () => {
+      const script = document.createElement("script");
+      script.id = "site-structured-data";
+      script.type = "application/ld+json";
+      return script;
+    });
+
+    structuredDataScript.textContent = JSON.stringify(
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "@id": `${siteUrl}/#webpage`,
+        url: `${siteUrl}/`,
+        name: comingSoonMeta.title,
+        description: comingSoonMeta.description,
+        image: comingSoonMeta.image,
+        inLanguage: "en-US",
+      },
+      null,
+      2,
+    );
+  }, []);
+
+  return (
+    <>
+      <main className="coming-soon-page" aria-labelledby="coming-soon-title">
+        <img className="coming-soon-bg" src={asset("coming-soon-bg.jpg")} alt="" aria-hidden="true" />
+        <div className="coming-soon-tint" aria-hidden="true" />
+        <div className="coming-soon-content">
+          <h1 className="coming-soon-title" id="coming-soon-title" aria-label="Coming Soon">
+            <span>Coming</span>
+            <span>Soon</span>
+          </h1>
+        </div>
+      </main>
+      <Analytics />
+    </>
+  );
+}
+
+function buildStructuredData(routePath, language = "en") {
   const canonicalUrl = getCanonicalUrl(routePath);
   const page = seoPages[routePath] || seoPages["/"];
+  const inLanguage = language === "es" ? "es-MX" : "en-US";
+  const pageTitle = translateCopy(page.title, language);
+  const pageDescription = translateCopy(page.description, language);
 
   const graph = [
     {
@@ -145,14 +236,14 @@ function buildStructuredData(routePath) {
       publisher: {
         "@id": `${siteUrl}/#restaurant`,
       },
-      inLanguage: "en-US",
+      inLanguage,
     },
     {
       "@type": "WebPage",
       "@id": `${canonicalUrl}#webpage`,
       url: canonicalUrl,
-      name: page.title,
-      description: page.description,
+      name: pageTitle,
+      description: pageDescription,
       isPartOf: {
         "@id": `${siteUrl}/#website`,
       },
@@ -163,7 +254,7 @@ function buildStructuredData(routePath) {
         "@type": "ImageObject",
         url: seoImage,
       },
-      inLanguage: "en-US",
+      inLanguage,
     },
   ];
 
@@ -974,6 +1065,8 @@ const spanishCopy = {
   "Hot griddles, melty cheese, salsa on standby.": "Comal caliente, queso derretido y salsa lista.",
   "From the first lime squeeze to the last chip, Juniors keeps the good stuff simple: warm tortillas, loaded trays, cold drinks, and enough flavor to make a quick stop feel like a plan.":
     "Desde el primer toque de limon hasta el ultimo totopo, Juniors mantiene lo bueno simple: tortillas calientes, charolas cargadas, bebidas frias y sabor para convertir una parada rapida en plan.",
+  "From the first lime squeeze to the last chip, Juniors keeps the good stuff simple: warm tortillas, loaded trays, cold drinks, and enough flavor to make tacos near St. Peters feel like a plan.":
+    "Desde el primer toque de limon hasta el ultimo totopo, Juniors mantiene lo bueno simple: tortillas calientes, charolas cargadas, bebidas frias y bastante sabor para que los tacos cerca de St. Peters se sientan como un plan.",
   Mexican: "Mexicana",
   "Thu-Sat": "Jue-Sab",
   "Clover pickup": "Recoger por Clover",
@@ -1190,6 +1283,170 @@ const spanishCopy = {
     "Tortilla gruesa de maiz con frijoles, pollo, lechuga, crema, pico de gallo y queso cotija.",
   "Thick corn tortilla spread with beans, beef tongue, lettuce, sour cream, pico de gallo, and cotija cheese.":
     "Tortilla gruesa de maiz con frijoles, lengua, lechuga, crema, pico de gallo y queso cotija.",
+  "Juniors Tacos | Taco Truck in St. Peters, MO": "Juniors Tacos | Taco truck en St. Peters, MO",
+  "Juniors Tacos is a taco truck in St. Peters, MO serving street tacos, burritos, quesadillas, nachos, Jarritos, desserts, pickup, and catering.":
+    "Juniors Tacos es un taco truck en St. Peters, MO que sirve tacos callejeros, burritos, quesadillas, nachos, Jarritos, postres, pedidos para recoger y catering.",
+  "Taco Truck Catering in St. Peters, MO | Juniors Tacos":
+    "Catering de taco truck en St. Peters, MO | Juniors Tacos",
+  "Book Juniors Tacos for taco truck catering in St. Peters, St. Charles County, and the St. Louis area. Request street tacos, nachos, quesadillas, Jarritos, and private event service.":
+    "Reserva Juniors Tacos para catering de taco truck en St. Peters, el condado de St. Charles y el area de St. Louis. Pide tacos callejeros, nachos, quesadillas, Jarritos y servicio para eventos privados.",
+  "Juniors Tacos Reviews | Best Taco Truck Notes in St. Peters":
+    "Resenas de Juniors Tacos | Comentarios del taco truck en St. Peters",
+  "Read customer reviews for Juniors Tacos, a St. Peters taco truck serving street tacos, quesadillas, nachos, burritos, and catering around the St. Louis area.":
+    "Lee resenas de clientes de Juniors Tacos, un taco truck de St. Peters que sirve tacos callejeros, quesadillas, nachos, burritos y catering en el area de St. Louis.",
+  Reviews: "Resenas",
+  Tracker: "Rastreador",
+  "A St. Peters taco truck for any taco night.": "Un taco truck de St. Peters para cualquier noche de tacos.",
+  "Real Clover pricing is live here: street tacos, burritos, nachos, quesadillas, drinks, desserts, tamales, and sopes.":
+    "Aqui estan los precios reales de Clover: tacos callejeros, burritos, nachos, quesadillas, bebidas, postres, tamales y sopes.",
+  "Tacos near St. Peters, Thursday through Saturday.": "Tacos cerca de St. Peters, de jueves a sabado.",
+  "Saint Peters, MO": "Saint Peters, MO",
+  "Local Guide": "Guia local",
+  "The most excellent tacos and quesadillas in the area. Family owned and they are friendly.":
+    "Los mejores tacos y quesadillas del area. Es un negocio familiar y son muy amables.",
+  "Tacos + quesadillas": "Tacos + quesadillas",
+  "6 months ago": "Hace 6 meses",
+  "BEST. TRUCK. EVER. JR's and his food truck crew are super awesome.":
+    "El mejor truck de todos. JR y su equipo del food truck son increibles.",
+  "Food truck crew": "Equipo del food truck",
+  "8 months ago": "Hace 8 meses",
+  "I wish I could find a Mexican restaurant with steak tacos this good.":
+    "Ojala encontrara un restaurante mexicano con tacos de asada tan buenos.",
+  "Steak tacos": "Tacos de asada",
+  "Taco truck in St. Peters": "Taco truck en St. Peters",
+  "Juniors Tacos serves authentic Mexican street tacos, burritos, quesadillas, nachos, tamales, sopes, desserts, and Jarritos for St. Peters pickup.":
+    "Juniors Tacos sirve tacos callejeros mexicanos, burritos, quesadillas, nachos, tamales, sopes, postres y Jarritos para recoger en St. Peters.",
+  "Tacos near me": "Tacos cerca de mi",
+  "If you are near St. Peters, St. Charles, Cottleville, or the west St. Louis area, use the live tracker to find the truck or order pickup through Clover.":
+    "Si estas cerca de St. Peters, St. Charles, Cottleville o el oeste de St. Louis, usa el rastreador en vivo para encontrar el truck u ordenar por Clover.",
+  "Best taco truck energy": "La mejor energia de taco truck",
+  "Customers call out the steak tacos, quesadillas, friendly family service, and fast food-truck experience in Google reviews.":
+    "En Google los clientes destacan los tacos de asada, las quesadillas, el servicio familiar amable y la experiencia rapida de food truck.",
+  "Corporate Lunch": "Almuerzo corporativo",
+  Birthday: "Cumpleanos",
+  Wedding: "Boda",
+  "School/University": "Escuela/Universidad",
+  "Neighborhood / HOA": "Vecindario / HOA",
+  Graduation: "Graduacion",
+  Fundraiser: "Recaudacion de fondos",
+  "Private Party": "Fiesta privada",
+  "Truck service": "Servicio con truck",
+  "Bring the window, the griddle, and the line-worthy energy to your event.":
+    "Lleva la ventanilla, el comal y la energia que hace fila a tu evento.",
+  "Best for offices, breweries, school nights, and community stops.":
+    "Ideal para oficinas, cervecerias, noches escolares y paradas comunitarias.",
+  "Taco bar": "Barra de tacos",
+  "Tacos, toppings, salsas, rice, beans, chips, and drinks set up for easy serving.":
+    "Tacos, toppings, salsas, arroz, frijoles, chips y bebidas preparados para servir facil.",
+  "A smooth fit for meetings, birthdays, and casual receptions.":
+    "Una buena opcion para reuniones, cumpleanos y recepciones casuales.",
+  "Nacho table": "Mesa de nachos",
+  "A shareable spread with nachos supreme, quesadillas, Jarritos, and dessert add-ons.":
+    "Una mesa para compartir con nachos supreme, quesadillas, Jarritos y postres extra.",
+  "Made for big snack energy without slowing down the party.":
+    "Hecha para antojos grandes sin frenar la fiesta.",
+  "Juniors catering": "Catering de Juniors",
+  "Let Juniors cater to you.": "Deja que Juniors lleve el catering.",
+  "Bring authentic Mexican street tacos, nachos, quesadillas, Jarritos, and truck-service energy to your next office lunch, party, school event, or wedding.":
+    "Lleva tacos callejeros mexicanos, nachos, quesadillas, Jarritos y energia de taco truck a tu proximo almuerzo de oficina, fiesta, evento escolar o boda.",
+  "Start a request": "Iniciar solicitud",
+  "Loaded nachos tray": "Charola de nachos cargados",
+  "Quesadilla and salsa spread": "Quesadillas y salsas",
+  "Book the truck": "Reserva el truck",
+  "Taco truck catering with a real St. Louis street-food feel.":
+    "Catering de taco truck con sabor real de comida callejera de St. Louis.",
+  "Tell the team what kind of event you are planning, how many people are coming, and where the truck or setup needs to be. The request form below keeps the first message organized so booking starts clean.":
+    "Cuéntale al equipo que tipo de evento planeas, cuantas personas vendran y donde debe estar el truck o la preparacion. El formulario organiza el primer mensaje para que la reserva empiece clara.",
+  Truck: "Truck",
+  "On-site service": "Servicio en sitio",
+  Events: "Eventos",
+  "Private and public": "Privados y publicos",
+  "Tacos, nachos, drinks": "Tacos, nachos, bebidas",
+  "Catering styles": "Estilos de catering",
+  "Choose the setup that fits the day.": "Elige el formato que va con tu dia.",
+  "Use these as a starting point. The form lets you add the details that make the event yours.":
+    "Usa estas opciones como punto de partida. El formulario te deja agregar los detalles que hacen tuyo el evento.",
+  "Request catering": "Solicitar catering",
+  "Send the team the essentials.": "Envia al equipo lo esencial.",
+  "The form collects the booking details first. If the shared backend is connected, it saves the request; otherwise it prepares a clean text message and StreetFoodFinder handoff.":
+    "El formulario primero reune los detalles de la reserva. Si el backend compartido esta conectado, guarda la solicitud; si no, prepara un mensaje de texto claro y un pase a StreetFoodFinder.",
+  "Prefer direct contact?": "Prefieres contacto directo?",
+  "Why are you looking for a food truck?": "Para que necesitas un food truck?",
+  Name: "Nombre",
+  "Your name": "Tu nombre",
+  Phone: "Telefono",
+  Email: "Correo",
+  "you@example.com": "tu@ejemplo.com",
+  Guests: "Invitados",
+  "Event location": "Lugar del evento",
+  "Venue, address, or neighborhood": "Salon, direccion o vecindario",
+  "Service style": "Estilo de servicio",
+  "Anything else?": "Algo mas?",
+  "Tell us about parking, timing, dietary notes, or special requests.":
+    "Cuéntanos sobre estacionamiento, horarios, notas de dieta o solicitudes especiales.",
+  "Sending request...": "Enviando solicitud...",
+  "Sending...": "Enviando...",
+  "Submit request": "Enviar solicitud",
+  "Text request": "Enviar por texto",
+  "Open booking page": "Abrir pagina de reservas",
+  "Request sent. Juniors has your catering details.": "Solicitud enviada. Juniors ya tiene tus detalles de catering.",
+  "Request details are ready. Send them by text or finish booking on StreetFoodFinder.":
+    "Los detalles de la solicitud estan listos. Envialos por texto o termina la reserva en StreetFoodFinder.",
+  "Google reviews": "Resenas de Google",
+  "Folks find the truck once, then start planning the next stop.":
+    "La gente encuentra el truck una vez y luego empieza a planear la siguiente parada.",
+  "5.0 Google rating": "Calificacion 5.0 en Google",
+  "21 Google reviews": "21 resenas de Google",
+  "Here are a few notes people have left after grabbing tacos, quesadillas, and late-day truck food from Jr's Tacos.":
+    "Aqui hay algunos comentarios de personas que probaron tacos, quesadillas y comida del truck de Jr's Tacos.",
+  "Read Google reviews": "Leer resenas de Google",
+  "Leave a review": "Dejar una resena",
+  "What people say": "Lo que dice la gente",
+  "The kind of reviews that make our day.": "El tipo de resenas que nos alegran el dia.",
+  "A few favorites are pulled out here. For the newest stars, photos, and full comments, the Google listing is one tap away.":
+    "Aqui destacamos algunas favoritas. Para las estrellas, fotos y comentarios mas recientes, la ficha de Google esta a un toque.",
+  "Find us on Google": "Encuentranos en Google",
+  "Want the full review roll? Start with the map.": "Quieres todas las resenas? Empieza con el mapa.",
+  "The map keeps the address, directions, rating, and review link close by. Tap through to Google anytime for the latest comments from the people who have eaten with us.":
+    "El mapa mantiene cerca la direccion, indicaciones, calificacion y enlace de resenas. Entra a Google cuando quieras para ver los comentarios mas recientes.",
+  "Open full Google reviews": "Abrir todas las resenas de Google",
+  "Google profile": "Perfil de Google",
+  "Truck tracker": "Rastreador del truck",
+  "Live stops, pulled from StreetFoodFinder.": "Paradas en vivo desde StreetFoodFinder.",
+  "This live window follows Jr's Tacos on StreetFoodFinder, so schedule changes, public stops, and booking details stay current without a manual homepage edit.":
+    "Esta ventana sigue a Jr's Tacos en StreetFoodFinder, asi los cambios de horario, paradas publicas y detalles de reserva se mantienen actualizados sin editar la pagina principal.",
+  "Open full tracker": "Abrir rastreador completo",
+  "Book catering": "Reservar catering",
+  "StreetFoodFinder live": "StreetFoodFinder en vivo",
+  "Local taco search": "Busqueda local de tacos",
+  "Looking for the best taco truck near St. Peters?": "Buscas el mejor taco truck cerca de St. Peters?",
+  "Juniors Tacos keeps the essentials easy to find: current truck stops, pickup ordering, catering requests, and a menu built around authentic Mexican street-food favorites.":
+    "Juniors Tacos hace facil encontrar lo esencial: paradas actuales, ordenes para recoger, solicitudes de catering y un menu de favoritos mexicanos de comida callejera.",
+  "Catch the taco truck in St. Peters this week.": "Encuentra el taco truck en St. Peters esta semana.",
+  "Juniors Tacos is a taco truck in St. Peters serving real Clover menu prices for street tacos, burritos, quesadillas, supreme nachos, sweet tres leches, tamales, sopes, and cold Jarritos.":
+    "Juniors Tacos es un taco truck en St. Peters con precios reales de Clover para tacos callejeros, burritos, quesadillas, nachos supreme, tres leches, tamales, sopes y Jarritos frios.",
+  "Start with street tacos, share the nachos, chase it with Jarritos, then keep the live St. Peters taco truck schedule close for the next stop.":
+    "Empieza con tacos callejeros, comparte los nachos, acompanalo con Jarritos y ten cerca el horario en vivo del taco truck de St. Peters para la siguiente parada.",
+  "Real taco truck menu items, prices, options, and availability. Final checkout happens on Clover.":
+    "Articulos, precios, opciones y disponibilidad reales del taco truck. El pago final se hace en Clover.",
+  "from Juniors Tacos taco truck": "del taco truck Juniors Tacos",
+  "Authentic Mexican street food from a St. Peters taco truck.":
+    "Comida callejera mexicana autentica de un taco truck de St. Peters.",
+  "Juniors Tacos is listed as a Saint Peters Mexican food truck with pickup ordering through Clover. This page keeps taco truck browsing friendly while every order button sends customers to Clover for the real item, options, availability, payment, and pickup timing.":
+    "Juniors Tacos aparece como food truck mexicano en Saint Peters con ordenes para recoger por Clover. Esta pagina facilita explorar el taco truck y cada boton de orden lleva a Clover para articulos, opciones, disponibilidad, pago y horario de recogida reales.",
+  "Google buzz": "Comentarios de Google",
+  "Five-star notes for tacos near St. Peters.": "Comentarios de cinco estrellas para tacos cerca de St. Peters.",
+  "A quick taste of the Google feedback for anyone comparing taco trucks in St. Peters. The full reviews page links visitors to the current Google listing.":
+    "Una muestra rapida de los comentarios de Google para quien compara taco trucks en St. Peters. La pagina completa de resenas enlaza a la ficha actual de Google.",
+  "See reviews": "Ver resenas",
+  "Open Google": "Abrir Google",
+  "Bring the taco truck to the party.": "Lleva el taco truck a la fiesta.",
+  "Use the catering page to collect event details, pick a service style, and hand the request to the Juniors team cleanly.":
+    "Usa la pagina de catering para reunir detalles del evento, elegir un estilo de servicio y enviar la solicitud al equipo de Juniors de forma clara.",
+  "Start catering request": "Iniciar solicitud de catering",
+  "Taco truck": "Taco truck",
+  "St. Peters, MO": "St. Peters, MO",
+  "Tacos near St. Peters, priced from the Clover menu.": "Tacos cerca de St. Peters con precios del menu de Clover.",
 };
 
 function translateCopy(value, language) {
@@ -1686,7 +1943,7 @@ function ReviewsPage({ t }) {
   );
 }
 
-function App() {
+function FullSite() {
   const rootRef = useRef(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [pathName, setPathName] = useState(() => (typeof window === "undefined" ? "/" : window.location.pathname));
@@ -1869,7 +2126,7 @@ function App() {
         type: "application/ld+json",
       },
     );
-    structuredDataScript.textContent = JSON.stringify(buildStructuredData(routePath));
+    structuredDataScript.textContent = JSON.stringify(buildStructuredData(routePath, language));
   }, [isSpanish, language, routePath]);
 
   useEffect(() => {
@@ -1879,37 +2136,39 @@ function App() {
     }
 
     const context = gsap.context(() => {
-      const heroTimeline = gsap.timeline({ defaults: { ease: "power3.out" } });
+      if (!isSubPage) {
+        const heroTimeline = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-      heroTimeline
-        .from(".nav-shell", { yPercent: -120, duration: 0.85 })
-        .from(".hero-kicker", { autoAlpha: 0, y: 24, duration: 0.7 }, "-=0.28")
-        .from(".hero-word", { autoAlpha: 0, yPercent: 110, rotate: 3, stagger: 0.08, duration: 0.9 }, "-=0.35")
-        .from(".hero-copy, .hero-actions, .hero-note", { autoAlpha: 0, y: 28, stagger: 0.12, duration: 0.72 }, "-=0.42")
-        .from(".hero-plate", { autoAlpha: 0, scale: 0.82, rotate: -9, duration: 0.9 }, "-=0.82")
-        .from(".order-card", { autoAlpha: 0, x: 50, duration: 0.75 }, "-=0.62");
+        heroTimeline
+          .from(".nav-shell", { yPercent: -120, duration: 0.85 })
+          .from(".hero-kicker", { autoAlpha: 0, y: 24, duration: 0.7 }, "-=0.28")
+          .from(".hero-word", { autoAlpha: 0, yPercent: 110, rotate: 3, stagger: 0.08, duration: 0.9 }, "-=0.35")
+          .from(".hero-copy, .hero-actions, .hero-note", { autoAlpha: 0, y: 28, stagger: 0.12, duration: 0.72 }, "-=0.42")
+          .from(".hero-plate", { autoAlpha: 0, scale: 0.82, rotate: -9, duration: 0.9 }, "-=0.82")
+          .from(".order-card", { autoAlpha: 0, x: 50, duration: 0.75 }, "-=0.62");
 
-      gsap.to(".hero-plate", {
-        y: -34,
-        rotate: 4,
-        scrollTrigger: {
-          trigger: ".hero",
-          start: "top top",
-          end: "bottom top",
-          scrub: true,
-        },
-      });
+        gsap.to(".hero-plate", {
+          y: -34,
+          rotate: 4,
+          scrollTrigger: {
+            trigger: ".hero",
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
 
-      gsap.to(".floating-chip", {
-        y: "random(-18, 18)",
-        x: "random(-12, 12)",
-        rotate: "random(-12, 12)",
-        repeat: -1,
-        yoyo: true,
-        duration: "random(2.4, 4.6)",
-        ease: "sine.inOut",
-        stagger: 0.18,
-      });
+        gsap.to(".floating-chip", {
+          y: "random(-18, 18)",
+          x: "random(-12, 12)",
+          rotate: "random(-12, 12)",
+          repeat: -1,
+          yoyo: true,
+          duration: "random(2.4, 4.6)",
+          ease: "sine.inOut",
+          stagger: 0.18,
+        });
+      }
 
       ScrollTrigger.batch(".reveal", {
         start: "top 84%",
@@ -1943,20 +2202,22 @@ function App() {
         );
       });
 
-      gsap.to(".marquee-track", {
-        xPercent: -50,
-        repeat: -1,
-        duration: 24,
-        ease: "none",
-      });
+      if (!isSubPage) {
+        gsap.to(".marquee-track", {
+          xPercent: -50,
+          repeat: -1,
+          duration: 24,
+          ease: "none",
+        });
+      }
     }, rootRef);
 
     return () => context.revert();
-  }, []);
+  }, [isSubPage]);
 
   useEffect(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reducedMotion) {
+    if (reducedMotion || isSubPage) {
       return;
     }
 
@@ -1965,7 +2226,7 @@ function App() {
       { autoAlpha: 0, y: 24, scale: 0.985 },
       { autoAlpha: 1, y: 0, scale: 1, stagger: 0.06, duration: 0.45, ease: "power2.out" },
     );
-  }, [activeCategory, query]);
+  }, [activeCategory, isSubPage, query]);
 
   const closeMenu = () => setMenuOpen(false);
 
@@ -2853,6 +3114,14 @@ function App() {
       <Analytics />
     </div>
   );
+}
+
+function App() {
+  if (siteMode === "coming-soon") {
+    return <ComingSoonPage />;
+  }
+
+  return <FullSite />;
 }
 
 export default App;
