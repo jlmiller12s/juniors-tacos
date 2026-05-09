@@ -649,17 +649,48 @@ img {
   background: var(--paper);
 }
 
-.truck-finder {
+.pickup-video-section {
   position: relative;
   z-index: 5;
+  min-height: clamp(440px, 42vw, 640px);
+  display: grid;
+  align-items: start;
+  overflow: visible;
+  margin: -2.7rem 0 0;
+  padding: clamp(4.6rem, 7vw, 6.4rem) 1rem clamp(8rem, 12vw, 11rem);
+  isolation: isolate;
+}
+
+.pickup-video-bg,
+.pickup-video-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+
+.pickup-video-bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(1.12) contrast(1.08);
+}
+
+.pickup-video-overlay {
+  z-index: -1;
+  background: linear-gradient(180deg, rgba(23, 23, 23, 0.08), rgba(23, 23, 23, 0.14));
+}
+
+.truck-finder {
+  position: relative;
   width: min(calc(100% - 2rem), 1440px);
-  margin: -2.7rem auto clamp(4rem, 8vw, 7rem);
+  margin: 0 auto;
   display: grid;
   grid-template-columns: minmax(210px, 0.56fr) minmax(0, 1fr) auto;
   gap: 1rem;
   align-items: stretch;
   padding: 1rem;
-  background: var(--paper);
+  background: rgba(255, 248, 232, 0.84);
+  backdrop-filter: blur(10px);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
@@ -746,8 +777,10 @@ img {
 }
 
 .tracker-section {
+  position: relative;
+  z-index: 6;
   width: min(calc(100% - 2rem), 1440px);
-  margin: 0 auto clamp(4rem, 8vw, 7rem);
+  margin: clamp(-16rem, -12vw, -6.5rem) auto clamp(4rem, 8vw, 7rem);
   display: grid;
   grid-template-columns: minmax(380px, 0.62fr) minmax(0, 1fr);
   gap: clamp(1rem, 3vw, 2rem);
@@ -2593,6 +2626,10 @@ img {
     padding: clamp(1.4rem, 5vw, 2.3rem);
   }
 
+  .tracker-section {
+    margin-top: clamp(-7rem, -10vw, -4.5rem);
+  }
+
   .catering-request-copy {
     position: static;
   }
@@ -2751,6 +2788,14 @@ img {
   .reviews-feature-section,
   .google-live-section {
     width: min(calc(100% - 1rem), 1440px);
+  }
+
+  .pickup-video-section {
+    padding-bottom: 5.5rem;
+  }
+
+  .tracker-section {
+    margin-top: -5rem;
   }
 
   .tracker-copy {

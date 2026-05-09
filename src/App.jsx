@@ -274,7 +274,7 @@ const menuItems = [
     name: "Lengua Taco Beef Tongue",
     category: "Tacos",
     price: 4.5,
-    image: asset("tacos-hero.jpg"),
+    image: asset("asada-gemini.png"),
     badge: "Taco",
     description: "Corn tortilla, beef tongue, topped off with onion and cilantro.",
     options: tacoOptions,
@@ -286,7 +286,7 @@ const menuItems = [
     name: "Asada Taco Steak",
     category: "Tacos",
     price: 4,
-    image: asset("tacos-hero.jpg"),
+    image: asset("asada-chatgpt.png"),
     badge: "Taco",
     description: "Corn tortilla, grilled steak, topped off with onion and cilantro.",
     options: tacoOptions,
@@ -370,7 +370,7 @@ const menuItems = [
     name: "Nachos Supreme",
     category: "Nachos",
     price: 14,
-    image: asset("nachos-share.jpg"),
+    image: asset("nachos-supreme.png"),
     badge: "Shareable",
     description: "Corn tortilla chips, cheese sauce, ground beef, pico de gallo, corn, black beans, sour cream, and jalapenos.",
     options: nachosSupremeOptions,
@@ -418,7 +418,7 @@ const menuItems = [
     name: "Mexican Street Corn",
     category: "Nachos",
     price: 6,
-    image: asset("quesadilla-table.jpg"),
+    image: asset("mexican-street-corn.png"),
     badge: "Street corn",
     description: "Mexican street corn with mayo, cotija cheese, crushed Takis, and lime options.",
     options: cornOptions,
@@ -2223,583 +2223,589 @@ function App() {
         <ReviewsPage t={t} />
       ) : (
         <main id="top">
-        <section className="hero">
-          <div className="hero-bg" aria-hidden="true">
-            <div className="gradient-wash" />
-            <span className="floating-chip chip-one" />
-            <span className="floating-chip chip-two" />
-            <span className="floating-chip chip-three" />
-            <span className="floating-chip chip-four" />
-          </div>
+          <section className="hero">
+            <div className="hero-bg" aria-hidden="true">
+              <div className="gradient-wash" />
+              <span className="floating-chip chip-one" />
+              <span className="floating-chip chip-two" />
+              <span className="floating-chip chip-three" />
+              <span className="floating-chip chip-four" />
+            </div>
 
-          <div className="hero-content">
-            <div className="hero-copy-block">
-              <p className="hero-kicker">
-                <span />
-                {t("Authentic Mexican food truck")}
-              </p>
-              <h1 className="hero-title" aria-label="Juniors Tacos">
-                <span className="hero-line">
-                  <span className="hero-word">Juniors</span>
-                </span>
-                <span className="hero-line accent-line">
-                  <span className="hero-word">Tacos</span>
-                </span>
-              </h1>
-              <p className="hero-copy">
+            <div className="hero-content">
+              <div className="hero-copy-block">
+                <p className="hero-kicker">
+                  <span />
+                  {t("Authentic Mexican food truck")}
+                </p>
+                <h1 className="hero-title" aria-label="Juniors Tacos">
+                  <span className="hero-line">
+                    <span className="hero-word">Juniors</span>
+                  </span>
+                  <span className="hero-line accent-line">
+                    <span className="hero-word">Tacos</span>
+                  </span>
+                </h1>
+                <p className="hero-copy">
+                  {t(
+                    "Juniors Tacos is a taco truck in St. Peters serving real Clover menu prices for street tacos, burritos, quesadillas, supreme nachos, sweet tres leches, tamales, sopes, and cold Jarritos.",
+                  )}
+                </p>
+                <div className="hero-actions">
+                  <a className="primary-btn" href="#menu">
+                    {t("Explore menu")}
+                    <ArrowRight size={18} />
+                  </a>
+                  <a className="secondary-btn" href="#schedule">
+                    {t("Pickup info")}
+                    <Navigation size={18} />
+                  </a>
+                </div>
+                <div className="hero-note">
+                  <Star size={18} />
+                  <span>{t("Online pickup through Clover: Thu-Sat, 10:30am-7:30pm")}</span>
+                </div>
+              </div>
+
+              <div className="hero-plate" aria-label={t("Featured taco plate")}>
+                <div className="plate-image">
+                  <img src={asset("hero-items.png")} alt={t("Two tacos on a black plate with lime")} />
+                </div>
+                <div className="plate-badge">
+                  <span>{t("Tacos")}</span>
+                  <strong>$4</strong>
+                </div>
+              </div>
+
+              <aside className="order-card">
+                <div>
+                  <p className="eyebrow">{t("Quick order")}</p>
+                  <h2>{t("Tacos, nachos, Jarritos. Done.")}</h2>
+                </div>
+                <a href={sources.cloverMenu} className="order-card-link" target="_blank" rel="noreferrer">
+                  {t("Open Clover")}
+                  <ExternalLink size={18} />
+                </a>
+              </aside>
+            </div>
+          </section>
+
+          <section className="pickup-video-section" id="schedule" aria-labelledby="schedule-title">
+            <video className="pickup-video-bg" autoPlay muted loop playsInline aria-hidden="true">
+              <source src={asset("hero-video.mp4")} type="video/mp4" />
+            </video>
+            <div className="pickup-video-overlay" aria-hidden="true" />
+            <div className="truck-finder reveal">
+              <div className="finder-copy">
+                <p className="eyebrow">{t("Pickup info")}</p>
+                <h2 id="schedule-title">{t("Catch the taco truck in St. Peters this week.")}</h2>
+              </div>
+              <div className="finder-list">
+                {scheduleStops.map((stop) => (
+                  <article className="stop-card" key={`${stop.day}-${stop.place}`}>
+                    <div>
+                      <span>{[t(stop.day), formatScheduleDate(stop.date, language)].filter(Boolean).join(" ")}</span>
+                      <h3>{t(stop.place)}</h3>
+                      <p>{t(stop.address)}</p>
+                      {stop.note ? <em>{t(stop.note)}</em> : null}
+                    </div>
+                    <strong>
+                      <Clock size={16} />
+                      {t(stop.time)}
+                    </strong>
+                  </article>
+                ))}
+              </div>
+              <a className="finder-link" href={sources.cloverMenu} target="_blank" rel="noreferrer">
+                {t("Order online")}
+                <ExternalLink size={18} />
+              </a>
+            </div>
+          </section>
+
+          <section className="tracker-section" id="tracker" aria-labelledby="tracker-title">
+            <div className="tracker-copy reveal">
+              <p className="eyebrow">{t("Truck tracker")}</p>
+              <h2 id="tracker-title">{t("Live stops, pulled from StreetFoodFinder.")}</h2>
+              <p>
                 {t(
-                  "Juniors Tacos is a taco truck in St. Peters serving real Clover menu prices for street tacos, burritos, quesadillas, supreme nachos, sweet tres leches, tamales, sopes, and cold Jarritos.",
+                  "This live window follows Jr's Tacos on StreetFoodFinder, so schedule changes, public stops, and booking details stay current without a manual homepage edit.",
                 )}
               </p>
-              <div className="hero-actions">
-                <a className="primary-btn" href="#menu">
-                  {t("Explore menu")}
-                  <ArrowRight size={18} />
+              <div className="tracker-actions">
+                <a className="primary-btn" href={sources.streetFoodFinder} target="_blank" rel="noreferrer">
+                  {t("Open full tracker")}
+                  <ExternalLink size={18} />
                 </a>
-                <a className="secondary-btn" href="#schedule">
-                  {t("Pickup info")}
-                  <Navigation size={18} />
+                <a className="secondary-btn" href="/catering">
+                  {t("Book catering")}
+                  <Truck size={18} />
                 </a>
-              </div>
-              <div className="hero-note">
-                <Star size={18} />
-                <span>{t("Online pickup through Clover: Thu-Sat, 10:30am-7:30pm")}</span>
               </div>
             </div>
 
-            <div className="hero-plate" aria-label={t("Featured taco plate")}>
-              <div className="plate-image">
-                <img src={asset("tacos-hero.jpg")} alt={t("Two tacos on a black plate with lime")} />
+            <div className="tracker-frame-shell reveal">
+              <div className="tracker-frame-toolbar">
+                <span>{t("StreetFoodFinder live")}</span>
+                <strong>Jr's Tacos</strong>
               </div>
-              <div className="plate-badge">
-                <span>{t("Tacos")}</span>
-                <strong>$4</strong>
-              </div>
+              <iframe
+                title="Jr's Tacos live StreetFoodFinder schedule"
+                src={sources.streetFoodFinder}
+                allow="geolocation"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
             </div>
+          </section>
 
-            <aside className="order-card">
+          <section className="local-search-section" aria-labelledby="local-search-title">
+            <div className="section-heading reveal">
               <div>
-                <p className="eyebrow">{t("Quick order")}</p>
-                <h2>{t("Tacos, nachos, Jarritos. Done.")}</h2>
+                <p className="eyebrow">{t("Local taco search")}</p>
+                <h2 id="local-search-title">{t("Looking for the best taco truck near St. Peters?")}</h2>
               </div>
-              <a href={sources.cloverMenu} className="order-card-link" target="_blank" rel="noreferrer">
-                {t("Open Clover")}
-                <ExternalLink size={18} />
-              </a>
-            </aside>
-          </div>
-        </section>
+              <p>
+                {t(
+                  "Juniors Tacos keeps the essentials easy to find: current truck stops, pickup ordering, catering requests, and a menu built around authentic Mexican street-food favorites.",
+                )}
+              </p>
+            </div>
+            <div className="local-search-grid">
+              {localSearchCards.map((item) => (
+                <article className="local-search-card reveal" key={item.title}>
+                  <MapPin size={22} />
+                  <h3>{t(item.title)}</h3>
+                  <p>{t(item.copy)}</p>
+                </article>
+              ))}
+            </div>
+          </section>
 
-        <section className="truck-finder reveal" id="schedule" aria-labelledby="schedule-title">
-          <div className="finder-copy">
-            <p className="eyebrow">{t("Pickup info")}</p>
-            <h2 id="schedule-title">{t("Catch the taco truck in St. Peters this week.")}</h2>
-          </div>
-          <div className="finder-list">
-            {scheduleStops.map((stop) => (
-              <article className="stop-card" key={`${stop.day}-${stop.place}`}>
+          <section className="admin-section" id="admin" aria-labelledby="admin-title">
+            <div className="admin-shell">
+              <div className="section-heading admin-heading">
                 <div>
-                  <span>{[t(stop.day), formatScheduleDate(stop.date, language)].filter(Boolean).join(" ")}</span>
-                  <h3>{t(stop.place)}</h3>
-                  <p>{t(stop.address)}</p>
-                  {stop.note ? <em>{t(stop.note)}</em> : null}
+                  <p className="eyebrow">{t("Owner admin preview")}</p>
+                  <h2 id="admin-title">{t("Location Schedule Admin")}</h2>
                 </div>
-                <strong>
-                  <Clock size={16} />
-                  {t(stop.time)}
-                </strong>
-              </article>
-            ))}
-          </div>
-          <a className="finder-link" href={sources.cloverMenu} target="_blank" rel="noreferrer">
-            {t("Order online")}
-            <ExternalLink size={18} />
-          </a>
-        </section>
-
-        <section className="tracker-section" id="tracker" aria-labelledby="tracker-title">
-          <div className="tracker-copy reveal">
-            <p className="eyebrow">{t("Truck tracker")}</p>
-            <h2 id="tracker-title">{t("Live stops, pulled from StreetFoodFinder.")}</h2>
-            <p>
-              {t(
-                "This live window follows Jr's Tacos on StreetFoodFinder, so schedule changes, public stops, and booking details stay current without a manual homepage edit.",
-              )}
-            </p>
-            <div className="tracker-actions">
-              <a className="primary-btn" href={sources.streetFoodFinder} target="_blank" rel="noreferrer">
-                {t("Open full tracker")}
-                <ExternalLink size={18} />
-              </a>
-              <a className="secondary-btn" href="/catering">
-                {t("Book catering")}
-                <Truck size={18} />
-              </a>
-            </div>
-          </div>
-
-          <div className="tracker-frame-shell reveal">
-            <div className="tracker-frame-toolbar">
-              <span>{t("StreetFoodFinder live")}</span>
-              <strong>Jr's Tacos</strong>
-            </div>
-            <iframe
-              title="Jr's Tacos live StreetFoodFinder schedule"
-              src={sources.streetFoodFinder}
-              allow="geolocation"
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            />
-          </div>
-        </section>
-
-        <section className="local-search-section" aria-labelledby="local-search-title">
-          <div className="section-heading reveal">
-            <div>
-              <p className="eyebrow">{t("Local taco search")}</p>
-              <h2 id="local-search-title">{t("Looking for the best taco truck near St. Peters?")}</h2>
-            </div>
-            <p>
-              {t(
-                "Juniors Tacos keeps the essentials easy to find: current truck stops, pickup ordering, catering requests, and a menu built around authentic Mexican street-food favorites.",
-              )}
-            </p>
-          </div>
-          <div className="local-search-grid">
-            {localSearchCards.map((item) => (
-              <article className="local-search-card reveal" key={item.title}>
-                <MapPin size={22} />
-                <h3>{t(item.title)}</h3>
-                <p>{t(item.copy)}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="admin-section" id="admin" aria-labelledby="admin-title">
-          <div className="admin-shell">
-            <div className="section-heading admin-heading">
-              <div>
-                <p className="eyebrow">{t("Owner admin preview")}</p>
-                <h2 id="admin-title">{t("Location Schedule Admin")}</h2>
-              </div>
-              <p>{t("Type or dictate the weekly stops, review the draft, then publish the schedule into the public pickup cards.")}</p>
-            </div>
-
-            <div className="admin-grid">
-              <div className="admin-panel">
-                <label className="admin-field">
-                  <span>{t("Weekly update")}</span>
-                  <textarea
-                    value={adminText}
-                    onChange={(event) => setAdminText(event.target.value)}
-                    rows={8}
-                    placeholder={t("Tuesday at O'Fallon Brewery 11am-2pm")}
-                  />
-                </label>
-
-                <label className="admin-field compact-field">
-                  <span>{t("Backend admin passcode")}</span>
-                  <input
-                    type="password"
-                    value={adminToken}
-                    onChange={(event) => setAdminToken(event.target.value)}
-                    placeholder={t("Required for shared live publishing")}
-                  />
-                </label>
-
-                <div className="admin-actions">
-                  <button className="secondary-btn" type="button" onClick={dictateSchedule}>
-                    <Mic size={18} />
-                    {isListening ? t("Stop listening") : t("Dictate")}
-                  </button>
-                  <button className="primary-btn" type="button" onClick={buildScheduleDraft}>
-                    <Sparkles size={18} />
-                    {t("Generate draft")}
-                  </button>
-                </div>
-
-                <p className="admin-status">{t(adminStatus)}</p>
+                <p>{t("Type or dictate the weekly stops, review the draft, then publish the schedule into the public pickup cards.")}</p>
               </div>
 
-              <div className="admin-panel">
-                <div className="admin-panel-head">
-                  <div>
-                    <p className="eyebrow">{t("Review")}</p>
-                    <h3>{t("Draft stops")}</h3>
+              <div className="admin-grid">
+                <div className="admin-panel">
+                  <label className="admin-field">
+                    <span>{t("Weekly update")}</span>
+                    <textarea
+                      value={adminText}
+                      onChange={(event) => setAdminText(event.target.value)}
+                      rows={8}
+                      placeholder={t("Tuesday at O'Fallon Brewery 11am-2pm")}
+                    />
+                  </label>
+
+                  <label className="admin-field compact-field">
+                    <span>{t("Backend admin passcode")}</span>
+                    <input
+                      type="password"
+                      value={adminToken}
+                      onChange={(event) => setAdminToken(event.target.value)}
+                      placeholder={t("Required for shared live publishing")}
+                    />
+                  </label>
+
+                  <div className="admin-actions">
+                    <button className="secondary-btn" type="button" onClick={dictateSchedule}>
+                      <Mic size={18} />
+                      {isListening ? t("Stop listening") : t("Dictate")}
+                    </button>
+                    <button className="primary-btn" type="button" onClick={buildScheduleDraft}>
+                      <Sparkles size={18} />
+                      {t("Generate draft")}
+                    </button>
                   </div>
-                  <button className="secondary-btn compact-btn" type="button" onClick={addDraftStop}>
-                    <Plus size={17} />
-                    {t("Add stop")}
-                  </button>
+
+                  <p className="admin-status">{t(adminStatus)}</p>
                 </div>
 
-                <div className="draft-list">
-                  {draftSchedule.length ? (
-                    draftSchedule.map((stop) => (
-                      <article className="draft-stop" key={stop.id}>
-                        <div className="draft-stop-head">
-                          <strong>{t(stop.place)}</strong>
+                <div className="admin-panel">
+                  <div className="admin-panel-head">
+                    <div>
+                      <p className="eyebrow">{t("Review")}</p>
+                      <h3>{t("Draft stops")}</h3>
+                    </div>
+                    <button className="secondary-btn compact-btn" type="button" onClick={addDraftStop}>
+                      <Plus size={17} />
+                      {t("Add stop")}
+                    </button>
+                  </div>
+
+                  <div className="draft-list">
+                    {draftSchedule.length ? (
+                      draftSchedule.map((stop) => (
+                        <article className="draft-stop" key={stop.id}>
+                          <div className="draft-stop-head">
+                            <strong>{t(stop.place)}</strong>
+                            <button
+                              type="button"
+                              aria-label={`${t("Remove")} ${t(stop.place)}`}
+                              onClick={() => removeDraftStop(stop.id)}
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
+                          <div className="draft-fields">
+                            <label>
+                              <span>{t("Day")}</span>
+                              <input
+                                value={stop.day}
+                                onChange={(event) => updateDraftStop(stop.id, "day", event.target.value)}
+                              />
+                            </label>
+                            <label>
+                              <span>{t("Date")}</span>
+                              <input
+                                type="date"
+                                value={stop.date}
+                                onChange={(event) => updateDraftStop(stop.id, "date", event.target.value)}
+                              />
+                            </label>
+                            <label>
+                              <span>{t("Time")}</span>
+                              <input
+                                value={stop.time}
+                                onChange={(event) => updateDraftStop(stop.id, "time", event.target.value)}
+                              />
+                            </label>
+                            <label>
+                              <span>{t("Place")}</span>
+                              <input
+                                value={stop.place}
+                                onChange={(event) => updateDraftStop(stop.id, "place", event.target.value)}
+                              />
+                            </label>
+                            <label className="wide-field">
+                              <span>{t("Address")}</span>
+                              <input
+                                value={stop.address}
+                                onChange={(event) => updateDraftStop(stop.id, "address", event.target.value)}
+                              />
+                            </label>
+                            <label className="wide-field">
+                              <span>{t("Note")}</span>
+                              <input
+                                value={stop.note}
+                                onChange={(event) => updateDraftStop(stop.id, "note", event.target.value)}
+                              />
+                            </label>
+                          </div>
+                        </article>
+                      ))
+                    ) : (
+                      <div className="admin-empty">
+                        <CalendarDays size={28} />
+                        <span>{t("No draft yet.")}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="admin-actions admin-actions-bottom">
+                    <button
+                      className={`primary-btn publish-btn ${publishState === "success" ? "is-published" : ""}`}
+                      type="button"
+                      onClick={publishDraftSchedule}
+                      disabled={publishState === "publishing"}
+                    >
+                      <Save size={18} />
+                      {publishState === "success"
+                        ? t("Schedule Published")
+                        : publishState === "publishing"
+                          ? t("Publishing...")
+                          : t("Publish schedule")}
+                    </button>
+                    <button className="secondary-btn" type="button" onClick={resetSchedule}>
+                      {t("Reset default")}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <div className="marquee" aria-hidden="true">
+            <div className="marquee-track">
+              {["Street tacos", "Quesadillas", "Nachos supreme", "Jarritos", "Tres leches", "Catering"].map((item) => (
+                <span key={item}>{t(item)}</span>
+              ))}
+              {["Street tacos", "Quesadillas", "Nachos supreme", "Jarritos", "Tres leches", "Catering"].map((item) => (
+                <span key={`${item}-repeat`}>{t(item)}</span>
+              ))}
+            </div>
+          </div>
+
+          <section className="offers-section" id="offers" aria-labelledby="offers-title">
+            <div className="section-heading reveal">
+              <p className="eyebrow">{t("Fresh drops")}</p>
+              <h2 id="offers-title">{t("Big-deal energy, taco truck soul.")}</h2>
+              <p>{t("Start with street tacos, share the nachos, chase it with Jarritos, then keep the live St. Peters taco truck schedule close for the next stop.")}</p>
+            </div>
+
+            <div className="offer-grid">
+              {offers.map((offer, index) => {
+                const Icon = offer.icon;
+                return (
+                  <article className="offer-card reveal" style={{ "--delay": `${index * 90}ms` }} key={offer.title}>
+                    <div className="offer-icon">
+                      <Icon size={24} />
+                    </div>
+                    <p>{t(offer.eyebrow)}</p>
+                    <h3>{t(offer.title)}</h3>
+                    <span>{t(offer.copy)}</span>
+                    <a
+                      href={index === 1 ? sources.cloverMenu : index === 2 ? "#schedule" : "#menu"}
+                      target={index === 1 ? "_blank" : undefined}
+                      rel={index === 1 ? "noreferrer" : undefined}
+                    >
+                      {t(offer.action)}
+                      {index === 1 ? <ExternalLink size={18} /> : <ArrowRight size={18} />}
+                    </a>
+                  </article>
+                );
+              })}
+            </div>
+          </section>
+
+          <section className="feature-band" aria-label={t("Featured food")}>
+            <div className="feature-media reveal">
+              <img className="parallax-img" src={asset("chicken-bacon-ranch-quesdilla.png")} alt={t("Cut quesadilla with salsa")} />
+            </div>
+            <div className="feature-copy reveal">
+              <p className="eyebrow">{t("Made for the window")}</p>
+              <h2>{t("Hot griddles, melty cheese, salsa on standby.")}</h2>
+              <p>{t("From the first lime squeeze to the last chip, Juniors keeps the good stuff simple: warm tortillas, loaded trays, cold drinks, and enough flavor to make tacos near St. Peters feel like a plan.")}</p>
+              <div className="feature-stats">
+                <span>
+                  <strong>{t("Taco truck")}</strong>
+                  {t("St. Peters, MO")}
+                </span>
+                <span>
+                  <strong>{t("Thu-Sat")}</strong>
+                  {t("Clover pickup")}
+                </span>
+                <span>
+                  <strong>$4</strong>
+                  {t("Street tacos")}
+                </span>
+              </div>
+            </div>
+          </section>
+
+          <section className="menu-section" id="menu" aria-labelledby="menu-title">
+            <div className="section-heading reveal">
+              <p className="eyebrow">{t("The menu")}</p>
+              <h2 id="menu-title">{t("Tacos near St. Peters, priced from the Clover menu.")}</h2>
+              <p>{t("Real taco truck menu items, prices, options, and availability. Final checkout happens on Clover.")}</p>
+            </div>
+
+            <div className="menu-toolbar reveal">
+              <div className="category-tabs" role="tablist" aria-label={t("Menu categories")}>
+                {categories.map((category) => (
+                  <button
+                    className={activeCategory === category ? "is-active" : ""}
+                    type="button"
+                    role="tab"
+                    aria-selected={activeCategory === category}
+                    onClick={() => setActiveCategory(category)}
+                    key={category}
+                  >
+                    {t(category)}
+                  </button>
+                ))}
+              </div>
+
+              <label className="menu-search">
+                <Search size={18} />
+                <input
+                  type="search"
+                  placeholder={t("Search menu")}
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                />
+              </label>
+            </div>
+
+            <div className="menu-layout">
+              <div className="menu-grid" aria-live="polite">
+                {filteredMenu.length > 0 ? (
+                  filteredMenu.map((item) => (
+                    <article className={`menu-card ${item.available === false ? "is-unavailable" : ""}`} key={item.id}>
+                      <div className="menu-card-image">
+                        <img src={item.image} alt={`${t(item.name)} ${t("from Juniors Tacos taco truck")}`} />
+                        <span>{item.available === false ? t("Unavailable") : t(item.badge)}</span>
+                      </div>
+                      <div className="menu-card-body">
+                        <div className="menu-card-title">
+                          <div>
+                            <p>{t(item.category)}</p>
+                            <h3>{t(item.name)}</h3>
+                          </div>
+                          <strong>{formatPrice(item.price)}</strong>
+                        </div>
+                        <p>{t(item.description)}</p>
+                        {item.options?.length ? (
+                          <div className="option-list" aria-label={`${t(item.name)} ${t("options")}`}>
+                            {item.options.slice(0, 5).map((option) => (
+                              <span key={option}>{t(option)}</span>
+                            ))}
+                            {item.options.length > 5 ? (
+                              <span>
+                                +{item.options.length - 5} {t("more")}
+                              </span>
+                            ) : null}
+                          </div>
+                        ) : null}
+                        <div className="quantity-row">
                           <button
                             type="button"
-                            aria-label={`${t("Remove")} ${t(stop.place)}`}
-                            onClick={() => removeDraftStop(stop.id)}
+                            aria-label={`${t("Remove")} ${t(item.name)}`}
+                            onClick={() => updateCart(item.id, -1)}
+                            disabled={!cart[item.id] || item.available === false}
                           >
-                            <Trash2 size={16} />
+                            <Minus size={16} />
+                          </button>
+                          <span>{cart[item.id] || 0}</span>
+                          <button
+                            type="button"
+                            aria-label={`${t("Add")} ${t(item.name)}`}
+                            onClick={() => updateCart(item.id, 1)}
+                            disabled={item.available === false}
+                          >
+                            <Plus size={16} />
                           </button>
                         </div>
-                        <div className="draft-fields">
-                          <label>
-                            <span>{t("Day")}</span>
-                            <input
-                              value={stop.day}
-                              onChange={(event) => updateDraftStop(stop.id, "day", event.target.value)}
-                            />
-                          </label>
-                          <label>
-                            <span>{t("Date")}</span>
-                            <input
-                              type="date"
-                              value={stop.date}
-                              onChange={(event) => updateDraftStop(stop.id, "date", event.target.value)}
-                            />
-                          </label>
-                          <label>
-                            <span>{t("Time")}</span>
-                            <input
-                              value={stop.time}
-                              onChange={(event) => updateDraftStop(stop.id, "time", event.target.value)}
-                            />
-                          </label>
-                          <label>
-                            <span>{t("Place")}</span>
-                            <input
-                              value={stop.place}
-                              onChange={(event) => updateDraftStop(stop.id, "place", event.target.value)}
-                            />
-                          </label>
-                          <label className="wide-field">
-                            <span>{t("Address")}</span>
-                            <input
-                              value={stop.address}
-                              onChange={(event) => updateDraftStop(stop.id, "address", event.target.value)}
-                            />
-                          </label>
-                          <label className="wide-field">
-                            <span>{t("Note")}</span>
-                            <input
-                              value={stop.note}
-                              onChange={(event) => updateDraftStop(stop.id, "note", event.target.value)}
-                            />
-                          </label>
-                        </div>
-                      </article>
-                    ))
-                  ) : (
-                    <div className="admin-empty">
-                      <CalendarDays size={28} />
-                      <span>{t("No draft yet.")}</span>
-                    </div>
-                  )}
-                </div>
-
-                <div className="admin-actions admin-actions-bottom">
-                  <button
-                    className={`primary-btn publish-btn ${publishState === "success" ? "is-published" : ""}`}
-                    type="button"
-                    onClick={publishDraftSchedule}
-                    disabled={publishState === "publishing"}
-                  >
-                    <Save size={18} />
-                    {publishState === "success"
-                      ? t("Schedule Published")
-                      : publishState === "publishing"
-                        ? t("Publishing...")
-                        : t("Publish schedule")}
-                  </button>
-                  <button className="secondary-btn" type="button" onClick={resetSchedule}>
-                    {t("Reset default")}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <div className="marquee" aria-hidden="true">
-          <div className="marquee-track">
-            {["Street tacos", "Quesadillas", "Nachos supreme", "Jarritos", "Tres leches", "Catering"].map((item) => (
-              <span key={item}>{t(item)}</span>
-            ))}
-            {["Street tacos", "Quesadillas", "Nachos supreme", "Jarritos", "Tres leches", "Catering"].map((item) => (
-              <span key={`${item}-repeat`}>{t(item)}</span>
-            ))}
-          </div>
-        </div>
-
-        <section className="offers-section" id="offers" aria-labelledby="offers-title">
-          <div className="section-heading reveal">
-            <p className="eyebrow">{t("Fresh drops")}</p>
-            <h2 id="offers-title">{t("Big-deal energy, taco truck soul.")}</h2>
-            <p>{t("Start with street tacos, share the nachos, chase it with Jarritos, then keep the live St. Peters taco truck schedule close for the next stop.")}</p>
-          </div>
-
-          <div className="offer-grid">
-            {offers.map((offer, index) => {
-              const Icon = offer.icon;
-              return (
-                <article className="offer-card reveal" style={{ "--delay": `${index * 90}ms` }} key={offer.title}>
-                  <div className="offer-icon">
-                    <Icon size={24} />
+                        {item.available === false ? (
+                          <span className="item-order-link disabled">{t("Currently unavailable on Clover")}</span>
+                        ) : (
+                          <a className="item-order-link" href={item.orderUrl} target="_blank" rel="noreferrer">
+                            {t("Order this item on Clover")}
+                            <ExternalLink size={15} />
+                          </a>
+                        )}
+                      </div>
+                    </article>
+                  ))
+                ) : (
+                  <div className="empty-menu">
+                    <Utensils size={30} />
+                    <p>{t("No menu items matched that search.")}</p>
                   </div>
-                  <p>{t(offer.eyebrow)}</p>
-                  <h3>{t(offer.title)}</h3>
-                  <span>{t(offer.copy)}</span>
-                  <a
-                    href={index === 1 ? sources.cloverMenu : index === 2 ? "#schedule" : "#menu"}
-                    target={index === 1 ? "_blank" : undefined}
-                    rel={index === 1 ? "noreferrer" : undefined}
-                  >
-                    {t(offer.action)}
-                    {index === 1 ? <ExternalLink size={18} /> : <ArrowRight size={18} />}
-                  </a>
-                </article>
-              );
-            })}
-          </div>
-        </section>
-
-        <section className="feature-band" aria-label={t("Featured food")}>
-          <div className="feature-media reveal">
-            <img className="parallax-img" src={asset("quesadilla-table.jpg")} alt={t("Cut quesadilla with salsa")} />
-          </div>
-          <div className="feature-copy reveal">
-            <p className="eyebrow">{t("Made for the window")}</p>
-            <h2>{t("Hot griddles, melty cheese, salsa on standby.")}</h2>
-            <p>{t("From the first lime squeeze to the last chip, Juniors keeps the good stuff simple: warm tortillas, loaded trays, cold drinks, and enough flavor to make tacos near St. Peters feel like a plan.")}</p>
-            <div className="feature-stats">
-              <span>
-                <strong>{t("Taco truck")}</strong>
-                {t("St. Peters, MO")}
-              </span>
-              <span>
-                <strong>{t("Thu-Sat")}</strong>
-                {t("Clover pickup")}
-              </span>
-              <span>
-                <strong>$4</strong>
-                {t("Street tacos")}
-              </span>
-            </div>
-          </div>
-        </section>
-
-        <section className="menu-section" id="menu" aria-labelledby="menu-title">
-          <div className="section-heading reveal">
-            <p className="eyebrow">{t("The menu")}</p>
-            <h2 id="menu-title">{t("Tacos near St. Peters, priced from the Clover menu.")}</h2>
-            <p>{t("Real taco truck menu items, prices, options, and availability. Final checkout happens on Clover.")}</p>
-          </div>
-
-          <div className="menu-toolbar reveal">
-            <div className="category-tabs" role="tablist" aria-label={t("Menu categories")}>
-              {categories.map((category) => (
-                <button
-                  className={activeCategory === category ? "is-active" : ""}
-                  type="button"
-                  role="tab"
-                  aria-selected={activeCategory === category}
-                  onClick={() => setActiveCategory(category)}
-                  key={category}
-                >
-                  {t(category)}
-                </button>
-              ))}
-            </div>
-
-            <label className="menu-search">
-              <Search size={18} />
-              <input
-                type="search"
-                placeholder={t("Search menu")}
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-              />
-            </label>
-          </div>
-
-          <div className="menu-layout">
-            <div className="menu-grid" aria-live="polite">
-              {filteredMenu.length > 0 ? (
-                filteredMenu.map((item) => (
-                  <article className={`menu-card ${item.available === false ? "is-unavailable" : ""}`} key={item.id}>
-                    <div className="menu-card-image">
-                      <img src={item.image} alt={`${t(item.name)} ${t("from Juniors Tacos taco truck")}`} />
-                      <span>{item.available === false ? t("Unavailable") : t(item.badge)}</span>
-                    </div>
-                    <div className="menu-card-body">
-                      <div className="menu-card-title">
-                        <div>
-                          <p>{t(item.category)}</p>
-                          <h3>{t(item.name)}</h3>
-                        </div>
-                        <strong>{formatPrice(item.price)}</strong>
-                      </div>
-                      <p>{t(item.description)}</p>
-                      {item.options?.length ? (
-                        <div className="option-list" aria-label={`${t(item.name)} ${t("options")}`}>
-                          {item.options.slice(0, 5).map((option) => (
-                            <span key={option}>{t(option)}</span>
-                          ))}
-                          {item.options.length > 5 ? (
-                            <span>
-                              +{item.options.length - 5} {t("more")}
-                            </span>
-                          ) : null}
-                        </div>
-                      ) : null}
-                      <div className="quantity-row">
-                        <button
-                          type="button"
-                          aria-label={`${t("Remove")} ${t(item.name)}`}
-                          onClick={() => updateCart(item.id, -1)}
-                          disabled={!cart[item.id] || item.available === false}
-                        >
-                          <Minus size={16} />
-                        </button>
-                        <span>{cart[item.id] || 0}</span>
-                        <button
-                          type="button"
-                          aria-label={`${t("Add")} ${t(item.name)}`}
-                          onClick={() => updateCart(item.id, 1)}
-                          disabled={item.available === false}
-                        >
-                          <Plus size={16} />
-                        </button>
-                      </div>
-                      {item.available === false ? (
-                        <span className="item-order-link disabled">{t("Currently unavailable on Clover")}</span>
-                      ) : (
-                        <a className="item-order-link" href={item.orderUrl} target="_blank" rel="noreferrer">
-                          {t("Order this item on Clover")}
-                          <ExternalLink size={15} />
-                        </a>
-                      )}
-                    </div>
-                  </article>
-                ))
-              ) : (
-                <div className="empty-menu">
-                  <Utensils size={30} />
-                  <p>{t("No menu items matched that search.")}</p>
-                </div>
-              )}
-            </div>
-
-            <aside className="cart-panel reveal" aria-label={t("Order tray")}>
-              <div className="cart-panel-head">
-                <div>
-                  <p className="eyebrow">{t("Your tray")}</p>
-                  <h3>{totalItems ? `${totalItems} ${t(totalItems > 1 ? "items" : "item")}` : t("Ready when you are")}</h3>
-                </div>
-                <ShoppingBag size={24} />
+                )}
               </div>
 
-              {cartLines.length > 0 ? (
-                <div className="cart-lines">
-                  {cartLines.map((item) => (
-                    <div className="cart-line" key={item.id}>
-                      <span>
-                        {item.quantity}x {t(item.name)}
-                      </span>
-                      <strong>{formatPrice(item.quantity * item.price)}</strong>
-                    </div>
-                  ))}
+              <aside className="cart-panel reveal" aria-label={t("Order tray")}>
+                <div className="cart-panel-head">
+                  <div>
+                    <p className="eyebrow">{t("Your tray")}</p>
+                    <h3>{totalItems ? `${totalItems} ${t(totalItems > 1 ? "items" : "item")}` : t("Ready when you are")}</h3>
+                  </div>
+                  <ShoppingBag size={24} />
                 </div>
-              ) : (
-                <p className="cart-empty">{t("Add available favorites here for an estimate, then place the real order on Clover.")}</p>
-              )}
 
-              <div className="cart-total">
-                <span>{t("Estimated total")}</span>
-                <strong>{formatPrice(cartTotal)}</strong>
+                {cartLines.length > 0 ? (
+                  <div className="cart-lines">
+                    {cartLines.map((item) => (
+                      <div className="cart-line" key={item.id}>
+                        <span>
+                          {item.quantity}x {t(item.name)}
+                        </span>
+                        <strong>{formatPrice(item.quantity * item.price)}</strong>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="cart-empty">{t("Add available favorites here for an estimate, then place the real order on Clover.")}</p>
+                )}
+
+                <div className="cart-total">
+                  <span>{t("Estimated total")}</span>
+                  <strong>{formatPrice(cartTotal)}</strong>
+                </div>
+                <a className="primary-btn full-btn" href={sources.cloverMenu} target="_blank" rel="noreferrer">
+                  {t("Place order on Clover")}
+                  <ExternalLink size={18} />
+                </a>
+              </aside>
+            </div>
+          </section>
+
+          <section className="story-section" id="story">
+            <div className="story-copy reveal">
+              <p className="eyebrow">{t("Neighborhood flavor")}</p>
+              <h2>{t("Authentic Mexican street food from a St. Peters taco truck.")}</h2>
+              <p>{t("Juniors Tacos is listed as a Saint Peters Mexican food truck with pickup ordering through Clover. This page keeps taco truck browsing friendly while every order button sends customers to Clover for the real item, options, availability, payment, and pickup timing.")}</p>
+              <div className="review-strip">
+                {reviews.map((review) => (
+                  <span key={review}>
+                    <Heart size={16} />
+                    {t(review)}
+                  </span>
+                ))}
               </div>
-              <a className="primary-btn full-btn" href={sources.cloverMenu} target="_blank" rel="noreferrer">
-                {t("Place order on Clover")}
-                <ExternalLink size={18} />
-              </a>
-            </aside>
-          </div>
-        </section>
+            </div>
+            <div className="logo-showcase reveal">
+              <img src={asset("jr-taco-logo.jpg")} alt={t("Jr's Tacos smiling green logo")} />
+            </div>
+          </section>
 
-        <section className="story-section" id="story">
-          <div className="story-copy reveal">
-            <p className="eyebrow">{t("Neighborhood flavor")}</p>
-            <h2>{t("Authentic Mexican street food from a St. Peters taco truck.")}</h2>
-            <p>{t("Juniors Tacos is listed as a Saint Peters Mexican food truck with pickup ordering through Clover. This page keeps taco truck browsing friendly while every order button sends customers to Clover for the real item, options, availability, payment, and pickup timing.")}</p>
-            <div className="review-strip">
-              {reviews.map((review) => (
-                <span key={review}>
-                  <Heart size={16} />
-                  {t(review)}
-                </span>
+          <section className="home-reviews-section" aria-labelledby="home-reviews-title">
+            <div className="section-heading reveal">
+              <div>
+                <p className="eyebrow">{t("Google buzz")}</p>
+                <h2 id="home-reviews-title">{t("Five-star notes for tacos near St. Peters.")}</h2>
+              </div>
+              <p>
+                {t(
+                  "A quick taste of the Google feedback for anyone comparing taco trucks in St. Peters. The full reviews page links visitors to the current Google listing.",
+                )}
+              </p>
+            </div>
+            <div className="home-review-strip">
+              {googleReviewCards.map((review) => (
+                <GoogleReviewCard review={review} t={t} key={review.name} />
               ))}
             </div>
-          </div>
-          <div className="logo-showcase reveal">
-            <img src={asset("jr-taco-logo.jpg")} alt={t("Jr's Tacos smiling green logo")} />
-          </div>
-        </section>
-
-        <section className="home-reviews-section" aria-labelledby="home-reviews-title">
-          <div className="section-heading reveal">
-            <div>
-              <p className="eyebrow">{t("Google buzz")}</p>
-              <h2 id="home-reviews-title">{t("Five-star notes for tacos near St. Peters.")}</h2>
-            </div>
-            <p>
-              {t(
-                "A quick taste of the Google feedback for anyone comparing taco trucks in St. Peters. The full reviews page links visitors to the current Google listing.",
-              )}
-            </p>
-          </div>
-          <div className="home-review-strip">
-            {googleReviewCards.map((review) => (
-              <GoogleReviewCard review={review} t={t} key={review.name} />
-            ))}
-          </div>
-          <div className="home-review-actions reveal">
-            <a className="primary-btn" href="/reviews">
-              {t("See reviews")}
-              <ArrowRight size={18} />
-            </a>
-            <a className="secondary-btn" href={sources.googleReviews} target="_blank" rel="noreferrer">
-              {t("Open Google")}
-              <ExternalLink size={18} />
-            </a>
-          </div>
-        </section>
-
-        <section className="catering-section" id="catering" aria-labelledby="catering-title">
-          <div className="catering-bg">
-            <img className="parallax-img" src={asset("nachos-share.jpg")} alt="" />
-          </div>
-          <div className="catering-content reveal">
-            <p className="eyebrow">{t("Catering")}</p>
-            <h2 id="catering-title">{t("Bring the taco truck to the party.")}</h2>
-            <p>{t("Use the catering page to collect event details, pick a service style, and hand the request to the Juniors team cleanly.")}</p>
-            <div className="catering-actions">
-              <a className="primary-btn" href="/catering">
-                {t("Start catering request")}
-                <CalendarDays size={18} />
+            <div className="home-review-actions reveal">
+              <a className="primary-btn" href="/reviews">
+                {t("See reviews")}
+                <ArrowRight size={18} />
               </a>
-              <a className="secondary-btn" href={sources.streetFoodFinder} target="_blank" rel="noreferrer">
-                StreetFoodFinder
+              <a className="secondary-btn" href={sources.googleReviews} target="_blank" rel="noreferrer">
+                {t("Open Google")}
                 <ExternalLink size={18} />
               </a>
             </div>
-          </div>
-        </section>
+          </section>
+
+          <section className="catering-section" id="catering" aria-labelledby="catering-title">
+            <div className="catering-bg">
+              <img className="parallax-img" src={asset("nachos-share.jpg")} alt="" />
+            </div>
+            <div className="catering-content reveal">
+              <p className="eyebrow">{t("Catering")}</p>
+              <h2 id="catering-title">{t("Bring the taco truck to the party.")}</h2>
+              <p>{t("Use the catering page to collect event details, pick a service style, and hand the request to the Juniors team cleanly.")}</p>
+              <div className="catering-actions">
+                <a className="primary-btn" href="/catering">
+                  {t("Start catering request")}
+                  <CalendarDays size={18} />
+                </a>
+                <a className="secondary-btn" href={sources.streetFoodFinder} target="_blank" rel="noreferrer">
+                  StreetFoodFinder
+                  <ExternalLink size={18} />
+                </a>
+              </div>
+            </div>
+          </section>
         </main>
       )}
 
