@@ -55,15 +55,15 @@ const sources = {
 
 const contactPhone = "+16365798569";
 const siteUrl = "https://jrstacosstl.com";
-const seoImage = `${siteUrl}/assets/tacos-hero.jpg`;
-const siteMode = "coming-soon";
+export const seoImage = `${siteUrl}/assets/hero-items.png`;
+const siteMode = "live";
 const comingSoonMeta = {
   title: "Coming Soon | Juniors Tacos",
   description: "Juniors Tacos official site is coming soon.",
   image: `${siteUrl}/assets/coming-soon-bg.jpg`,
 };
 
-const seoPages = {
+export const seoPages = {
   "/": {
     title: "Juniors Tacos | Taco Truck in St. Peters, MO",
     description:
@@ -185,7 +185,7 @@ function ComingSoonPage() {
   );
 }
 
-function buildStructuredData(routePath, language = "en") {
+export function buildStructuredData(routePath, language = "en") {
   const canonicalUrl = getCanonicalUrl(routePath);
   const page = seoPages[routePath] || seoPages["/"];
   const inLanguage = language === "es" ? "es-MX" : "en-US";
@@ -1943,10 +1943,10 @@ function ReviewsPage({ t }) {
   );
 }
 
-function FullSite() {
+function FullSite({ initialPath = "/" }) {
   const rootRef = useRef(null);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [pathName, setPathName] = useState(() => (typeof window === "undefined" ? "/" : window.location.pathname));
+  const [pathName, setPathName] = useState(() => (typeof window === "undefined" ? initialPath : window.location.pathname));
   const [language, setLanguage] = useState(loadStoredLanguage);
   const [activeCategory, setActiveCategory] = useState("Popular");
   const [cart, setCart] = useState({});
@@ -2099,7 +2099,7 @@ function FullSite() {
     });
     upsertHeadElement('meta[property="og:image:alt"]', () => document.createElement("meta"), {
       property: "og:image:alt",
-      content: "Two street tacos from Juniors Tacos in St. Peters, Missouri",
+      content: "Nachos and quesadillas from Juniors Tacos in St. Peters, Missouri",
     });
     upsertHeadElement('meta[name="twitter:card"]', () => document.createElement("meta"), {
       name: "twitter:card",
@@ -3116,12 +3116,12 @@ function FullSite() {
   );
 }
 
-function App() {
+function App({ initialPath = "/" }) {
   if (siteMode === "coming-soon") {
     return <ComingSoonPage />;
   }
 
-  return <FullSite />;
+  return <FullSite initialPath={initialPath} />;
 }
 
 export default App;

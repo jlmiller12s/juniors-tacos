@@ -1,12 +1,18 @@
 {
+  "framework": "vite",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
   "rewrites": [
     {
       "source": "/catering",
-      "destination": "/index.html"
+      "destination": "/catering.html"
     },
     {
       "source": "/reviews",
-      "destination": "/index.html"
+      "destination": "/reviews.html"
     }
+  ],
+  "headers": [
+    { "source": "/api/:path*", "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }] }
   ]
 }

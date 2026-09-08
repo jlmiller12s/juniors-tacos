@@ -1,0 +1,16 @@
+# Juniors Tacos
+
+> Jr's Tacos, also known as Juniors Tacos, is a Mexican food truck serving St. Peters, Missouri and the St. Louis area.
+
+## Official pages
+- [Home, menu and location schedule](https://jrstacosstl.com/): Check the current schedule before traveling to the truck.
+- [Catering](https://jrstacosstl.com/catering): Event catering inquiries and service information.
+- [Reviews](https://jrstacosstl.com/reviews): Customer feedback and links to review sources.
+- [Online ordering and menu](https://jrs-tacos-saint-peters.cloveronline.com/menu/all): Use Clover for current ordering availability, menu options and prices.
+- [Truck tracker](https://streetfoodfinder.com/JrsTacos): Location and event information.
+- [Facebook](https://www.facebook.com/p/Jrs-Tacos-100086683935294/): Business updates.
+
+## Contact
+Phone: +1 636-579-8569. Pickup information on the website references 5 Auchly Ln, St. Peters, MO 63376. Truck locations and availability can change; consult the current schedule and ordering service.
+
+This file is a supplementary directory, not a replacement for the website or live ordering information.
