@@ -12,6 +12,7 @@ for (const route of ["/", "/catering", "/reviews"]) {
   assert(!document.getElementById("admin"));
   const data = JSON.parse(document.getElementById("site-structured-data").textContent);
   assert(data["@graph"].some(item => item["@type"] === "Restaurant"));
+  assert.equal(data["@graph"].find(item => item["@type"] === "Restaurant").menu, "https://jrs-tacos-st-peters.cloveronline.com/menu/all");
   assert(data["@graph"].some(item => item["@type"] === "WebPage" && item.url === `https://jrstacosstl.com${route}`));
   assert(document.querySelector('meta[name="description"]').getAttribute("content").length > 80);
 }

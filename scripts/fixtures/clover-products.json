@@ -1,0 +1,167 @@
+[
+  {
+    "siteName": "Pollo Taco Chicken",
+    "cloverName": "Pollo Taco",
+    "path": "/menu/pollo-taco-AS2138287THJ6"
+  },
+  {
+    "siteName": "El Pastor Taco Season Pork",
+    "cloverName": "Al Pastor Taco",
+    "path": "/menu/al-pastor-taco-FPFH2JC64YSMY"
+  },
+  {
+    "siteName": "Lengua Taco Beef Tongue",
+    "cloverName": "Lengua Taco",
+    "path": "/menu/lengua-taco-CT2VHN0SHJZPG"
+  },
+  {
+    "siteName": "Asada Taco Steak",
+    "cloverName": "Asada/Steak Taco",
+    "path": "/menu/asadasteak-taco-JAQGPJSAXQSV6"
+  },
+  {
+    "siteName": "Chorizo Taco Season Sausage",
+    "cloverName": "Chorizo Taco",
+    "path": "/menu/chorizo-taco-Q57ERNDDDHKJR"
+  },
+  {
+    "siteName": "Asada/Steak Burrito JR.",
+    "cloverName": "Asada/Steak Burrito JR.",
+    "path": "/menu/asadasteak-burrito-jr-F2NZF0RZ5PEXC"
+  },
+  {
+    "siteName": "Pollo/Chicken Burrito JR.",
+    "cloverName": "Pollo/Chicken Burrito JR.",
+    "path": "/menu/pollochicken-burrito-jr-X50PHBEDK39SM"
+  },
+  {
+    "siteName": "Al Pastor/Season Pork Burrito JR.",
+    "cloverName": "Al Pastor/Seasoned Pork Burrito JR.",
+    "path": "/menu/al-pastorseasoned-pork-burrito-jr-9BW22TBXX4J1W"
+  },
+  {
+    "siteName": "Chorizo/Season Sausage Burrito JR.",
+    "cloverName": "Chorizo/Seasoned Sausage Burrito JR.",
+    "path": "/menu/chorizoseasoned-sausage-burrito-jr-30NA6064G1ZRG"
+  },
+  {
+    "siteName": "Lengua/Beef Tongue Burrito JR.",
+    "cloverName": "Lengua/Beef Tongue Burrito JR.",
+    "path": "/menu/lenguabeef-tongue-burrito-jr-W44J3CDVAPJRY"
+  },
+  {
+    "siteName": "Nachos Supreme",
+    "cloverName": "Nachos Supreme",
+    "path": "/menu/nachos-supreme-2B60KYG287AJT"
+  },
+  {
+    "siteName": "Dori Nachos",
+    "cloverName": "Dori Nachos",
+    "path": "/menu/dori-nachos-EAH4V2FF1FRYY"
+  },
+  {
+    "siteName": "Dori Nachos Supreme",
+    "cloverName": "Dori Nachos Supreme",
+    "path": "/menu/dori-nachos-supreme-60T8Q43HQBK0Y"
+  },
+  {
+    "siteName": "Nachos",
+    "cloverName": "Nachos",
+    "path": "/menu/nachos-KZM8JGTC8JGQ6"
+  },
+  {
+    "siteName": "Mexican Street Corn",
+    "cloverName": "Mexican Street Corn",
+    "path": "/menu/mexican-street-corn-CGS27PVHRBFRC"
+  },
+  {
+    "siteName": "Pollo Quesadilla Chicken",
+    "cloverName": "Pollo Quesadilla",
+    "path": "/menu/pollo-quesadilla-0JF4X8S93F7E2"
+  },
+  {
+    "siteName": "Al Pastor Quesadilla Season Pork",
+    "cloverName": "Al Pastor/Seasoned Pork Quesadilla",
+    "path": "/menu/al-pastorseasoned-pork-quesadilla-NBPBGFTB44RMW"
+  },
+  {
+    "siteName": "Lengua Quesadilla Beef Tongue",
+    "cloverName": "Lengua Quesadilla",
+    "path": "/menu/lengua-quesadilla-N690NWT9ENYKP"
+  },
+  {
+    "siteName": "Asada Quesadilla Steak",
+    "cloverName": "Asada/Steak Quesadilla",
+    "path": "/menu/asadasteak-quesadilla-QKZRTW8QAYBMA"
+  },
+  {
+    "siteName": "Chorizo/Season Sausage Quesadilla",
+    "cloverName": "Chorizo/Seasoned Sausage Quesadilla",
+    "path": "/menu/chorizoseasoned-sausage-quesadilla-T0E7HK3YMKC60"
+  },
+  {
+    "siteName": "Cheese Quesadilla",
+    "cloverName": "Cheese Quesadilla",
+    "path": "/menu/cheese-quesadilla-DG6WP9VEP1JJT"
+  },
+  {
+    "siteName": "Veggie Quesadilla",
+    "cloverName": "Veggie Quesadilla",
+    "path": "/menu/veggie-quesadilla-P4988VAE5MKQY"
+  },
+  {
+    "siteName": "Coca",
+    "cloverName": "Coca-Cola",
+    "path": "/menu/coca-cola-AA71R2MVTWAPE"
+  },
+  {
+    "siteName": "Agua/Water",
+    "cloverName": "Agua/Water",
+    "path": "/menu/aguawater-CHN7ZFAJNHMPA"
+  },
+  {
+    "siteName": "Sprite",
+    "cloverName": "Sprite",
+    "path": "/menu/sprite-3F85940PMTYYP"
+  },
+  {
+    "siteName": "Jarrito Pineapple",
+    "cloverName": "Jarritos Pineapple",
+    "path": "/menu/jarritos-pineapple-VWX28SF3XBBFR"
+  },
+  {
+    "siteName": "Jarrito Fruit Punch",
+    "cloverName": "Jarritos Fruit Punch",
+    "path": "/menu/jarritos-fruit-punch-XGJHYM8PX6W34"
+  },
+  {
+    "siteName": "Manzanita Apple Soda",
+    "cloverName": "Manzanita Apple Soda",
+    "path": "/menu/manzanita-apple-soda-DFKCTCP52CPBJ"
+  },
+  {
+    "siteName": "Diet",
+    "cloverName": "Diet",
+    "path": "/menu/diet-T5TV81V3ZGCXY"
+  },
+  {
+    "siteName": "Dr. Pepper",
+    "cloverName": "Dr. Pepper",
+    "path": "/menu/dr-pepper-XCQ5HKY4YASF2"
+  },
+  {
+    "siteName": "Jarritos Lime",
+    "cloverName": "Jarritos Lime",
+    "path": "/menu/jarritos-lime-8X7GN09TJBV00"
+  },
+  {
+    "siteName": "Jarrito Tamarindo",
+    "cloverName": "Jarritos Tamarindo",
+    "path": "/menu/jarritos-tamarindo-CPHXABV3PXGHG"
+  },
+  {
+    "siteName": "Chocolate Tres Leches",
+    "cloverName": "Chocolate Tres Leches",
+    "path": "/menu/chocolate-tres-leches-3AXJ9SW76YE52"
+  }
+]

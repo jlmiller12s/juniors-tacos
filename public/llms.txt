@@ -6,7 +6,7 @@
 - [Home, menu and location schedule](https://jrstacosstl.com/): Check the current schedule before traveling to the truck.
 - [Catering](https://jrstacosstl.com/catering): Event catering inquiries and service information.
 - [Reviews](https://jrstacosstl.com/reviews): Customer feedback and links to review sources.
-- [Online ordering and menu](https://jrs-tacos-saint-peters.cloveronline.com/menu/all): Use Clover for current ordering availability, menu options and prices.
+- [Online ordering and menu](https://jrs-tacos-st-peters.cloveronline.com/menu/all): Use Clover for current ordering availability, menu options and prices.
 - [Truck tracker](https://streetfoodfinder.com/JrsTacos): Location and event information.
 - [Facebook](https://www.facebook.com/p/Jrs-Tacos-100086683935294/): Business updates.
 
